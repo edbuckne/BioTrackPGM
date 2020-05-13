@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>HomeForm.ui.qml</file>
+        <file>Page1Form.ui.qml</file>
+        <file>Page2Form.ui.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>ZENWindow.qml</file>
+        <file>ZENWindowForm.ui.qml</file>
+        <file>SpecimenDelegate.qml</file>
+        <file>SpecimenDelegateForm.ui.qml</file>
+    </qresource>
+</RCC>
