@@ -28,17 +28,19 @@ class config:
             self.sequence = []
 
             self.registration = []  # Create a registration class for each specimen
-            opt = eval(input('\n\n Which registration method would you like to use? \n  '
-                             '1. Point matching image registration (PMIR) \n  2. Center of mass registration (CMOR) \n  '
-                             '3. Trained root mean square registration (RMSR) \n  -1. Return \n  Option: '))
-
-            if opt == 1:
+            optreg = eval(input('\n\n Which registration method would you like to use? \n  '
+                                '1. Point matching image registration (PMIR) \n  2. Center of mass registration (CMOR) \n  '
+                                '3. Template matching image registration (TMIR) \n  4. Phase correlation image registration (PCIR) \n '
+                                '-1. Return \n  Option: '))  # Change the registration method
+            if optreg == 1:
                 reg_method = 'PMIR'  # Point matching image registration
-            elif opt == 2:
+            elif optreg == 2:
                 reg_method = 'COMR'  # Center of mass registration
-            elif opt == 3:
-                reg_method = 'RMSR'  # Root mean square registration
-            elif opt == -1:
+            elif optreg == 3:
+                reg_method = 'TMIR'  # Template matching image registration
+            elif optreg == 4:
+                reg_method = 'PCIR'  # Phase correlation image registration
+            elif optreg == -1:
                 reg_method = 'None'  # No method has been selected
             else:
                 Warning('The option you have chosen does not exist ... Using option 1')
@@ -90,10 +92,13 @@ class config:
             self.saveName = pickload.saveName
             self.path = pickload.path
             self.registration = pickload.registration
-            if 'self.registration[0].channel' not in locals(): # channel was added later. Check and replace with a 1 if it isn't there'
+            try:  # channel was added later. Check and replace with a 1 if it isn't there'
+                self.registration[0].channel
+            except NameError:
                 self.registration = []
                 for spm in range(int(self.expConfig[0])):
                     self.registration.append(registration(pickload.registration[spm].method, 1))
+
             self.edit_settings_menu()
 
             # config_out = create_config()
@@ -234,13 +239,16 @@ class config:
             elif opt == 11:  # Categorical options
                 optreg = eval(input('\n\n Which registration method would you like to use? \n  '
                                  '1. Point matching image registration (PMIR) \n  2. Center of mass registration (CMOR) \n  '
-                                 '3. Trained root mean square registration (RMSR) \n  -1. Return \n  Option: '))  # Change the registration method
+                                 '3. Template matching image registration (TMIR) \n  4. Phase correlation image registration (PCIR) \n '
+                                 '-1. Return \n  Option: '))  # Change the registration method
                 if optreg == 1:
                     reg_method = 'PMIR'  # Point matching image registration
                 elif optreg == 2:
                     reg_method = 'COMR'  # Center of mass registration
                 elif optreg == 3:
-                    reg_method = 'RMSR'  # Root mean square registration
+                    reg_method = 'TMIR'  # Template matching image registration
+                elif optreg == 4:
+                    reg_method = 'PCIR'  # Phase correlation image registration
                 elif optreg == -1:
                     reg_method = 'None'  # No method has been selected
                 else:
@@ -249,7 +257,7 @@ class config:
                 for spm in range(int(self.expConfig[0])):
                     self.registration[spm].method = reg_method
             elif opt == 12:  # Change the channel to do the image registration
-                newval = input('What do you want to change this value to? ')
+                newval = int(input('What do you want to change this value to? '))
                 for spm in range(int(self.expConfig[0])):
                     self.registration[spm].channel = newval
             else:  # Numeric options

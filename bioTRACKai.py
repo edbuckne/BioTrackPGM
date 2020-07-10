@@ -186,25 +186,35 @@ def run_experiment(conf, tStart, wait = False, simulation = False):
 
 
         for spm in range(spmN):
+            ch = int(conf.registration[spm].channel) - 1  # Determine the image to use for registration
+
             print('Loading: ' + conf.return_convention_name(t, spm, conf.sett.MICROSCOPE_LOAD_CONFIGURATION))
             # Here we need to design a way for loading the images from different file sources
-            # cziFileName = loadName + '/' + saveName + str(timeString) + '_G' + str(spm+1) + '.czi'  # Path to the czi file to evaluate
-            image_file_path = loadName + '/' + conf.return_convention_name(t, spm, conf.sett.MICROSCOPE_LOAD_CONFIGURATION) + '.czi'
-            print('Loading czi file for SPM ' + str(spm+1) + ' -- ' + image_file_path)
 
+            image_file_path = loadName + '/' + conf.return_convention_name(t, spm, conf.sett.MICROSCOPE_LOAD_CONFIGURATION) + '.czi'  # Load the image file into memory
+            print('Loading czi file for SPM ' + str(spm+1) + ' -- ' + image_file_path)
             I = czi(image_file_path, 0)  # Load the brightfield and fluorescent image from the czi file
+
+            if t > 0 and (conf.registration[spm].method == 'PMIR' or conf.registration[spm].method == 'PCIR'):  # Load the previous image as well if feature matching image registration is used
+                image_file_path_previous = loadName + '/' + conf.return_convention_name(t-1, spm, conf.sett.MICROSCOPE_LOAD_CONFIGURATION) + '.czi'
+                print('Loading czi file for SPM ' + str(spm + 1) + ' -- ' + image_file_path_previous)
+                Imin = czi(image_file_path_previous, 0)
+                Im1 = Imin[:, :, :, ch]
+            else:
+                Im1 = 0
+                image_file_path_previous = 'None'
 
             if conf.simulation and conf.sett.SIMULATION_IMAGE_PRINT:  # Print the simulated image if necessary
                 num_rows, num_cols = I.shape[:2]
                 translation_matrix = numpy.float32([[1, 0, -conf.registration[spm].cumshift[0]], [0, 1, -conf.registration[spm].cumshift[1]]])
-                imtranslate = cv2.warpAffine(I[:, :, :, 1], translation_matrix, (num_cols, num_rows))
+                imtranslate = cv2.warpAffine(I[:, :, :, ch], translation_matrix, (num_cols, num_rows))
                 scipy.misc.imsave('./Results/Sim/' + conf.return_convention_name(t, spm, conf.sett.MICROSCOPE_LOAD_CONFIGURATION) + '.png', numpy.max(imtranslate, axis=2))
 
-            conf.registration[spm].register_movement(conf, I[:, :, :, 0], t, spm)  # Calculates the shift in position for the XY lateral plane
+            conf.registration[spm].register_movement(conf, I[:, :, :, ch], t, spm, Im1)  # Calculates the shift in position for the XY lateral plane
 
             print('Calculating new z range for fluorescent image')
-            ch = int(conf.registration[spm].channel) - 1
-            z[spm, 0], z[spm, 1] = find_Z_Range(conf, I[:, :, :, ch])  # Get the range of z stacks that are to be imaged according to where the signal is
+
+            z[spm, 0], z[spm, 1] = find_Z_Range(conf, I[:, :, :, 0])  # Get the range of z stacks that are to be imaged according to where the signal is
 
         print('Saving new positions into database')
         dataHandle.new_mic_positions(conf, z, t)
