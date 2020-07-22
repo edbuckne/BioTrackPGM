@@ -257,7 +257,7 @@ class config:
                 for spm in range(int(self.expConfig[0])):
                     self.registration[spm].method = reg_method
             elif opt == 12:  # Change the channel to do the image registration
-                newval = int(input('What do you want to change this value to? '))
+♣               newval = int(input('What do you want to change this value to? '))
                 for spm in range(int(self.expConfig[0])):
                     self.registration[spm].channel = newval
             else:  # Numeric options
