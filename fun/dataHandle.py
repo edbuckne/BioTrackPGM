@@ -1,6 +1,7 @@
 from scipy import io
 import numpy as np
 import tifffile as tiff
+import os
 
 def initialize_expData(conf):
     dataInsert = conf.initConfig
@@ -111,3 +112,11 @@ def bring_z_to_front(I):
                 Inew[z, row, col] = I[row, col, z]
 
     return Inew
+
+def loadConfigurationList():
+    d = os.listdir('./mat/conf/')
+    return d
+
+def loadSequenceList():
+    d = os.listdir('./mat/seq')
+    return d

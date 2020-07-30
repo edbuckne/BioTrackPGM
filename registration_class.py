@@ -2,6 +2,7 @@ import os
 import cv2
 import numpy as np
 from skimage.measure import regionprops
+from skimage.feature import register_translation
 from findTip import findTip as ft
 import matplotlib.pyplot as plt
 
@@ -77,12 +78,25 @@ class registration:
         return np.array([im1centroid[1], im1centroid[0]])
 
 
-    # rmsr calculates the point in which the template (specified in tmpname) best matches the image
-    def rmsr(self, im1, tmpname = 'av.mat'):
+    # tmir calculates the point in which the template (specified in tmpname) best matches the image
+    def tmir(self, im1, tmpname = 'av.mat'):
         return np.array([0, 0])  # Just return 0, 0 as the point until the method is programmed
 
 
-    def register_movement(self, conf, I, t, spm):
+    # pmir calculates the point matching image registration translation from one image to the next. Returns the tracking error
+    def pmir(self, im1, im2):
+        return np.array([0, 0])  # Just return 0, 0 as the registered movement until the method is programmed
+
+
+    # pcir calculates the phase shift image registration translation from one image to the next. Returns the tracking error
+    def pcir(self, im1, im2):
+        im1config = self.configimage(im1)
+        im2config = self.configimage(im2)
+        shift, error, diffphase = register_translation(im2config, im1config)
+        return np.array([0, 0])  # Just return 0, 0 as the registered movement until the method is programmed
+
+
+    def register_movement(self, conf, I, t, spm, Im1 = 0):
         if self.method == 'PMIR':  # Point matching image registration
             print('Sorry that method has not been developed yet')
         elif self.method == 'COMR':
@@ -93,8 +107,14 @@ class registration:
                 self.new_GV(conf, poixy)  # Find the new growth vector given the position of the root tip
                 print('Tracking error for SPM ' + str(spm + 1) + ' = ' + str(self.dp))
                 print('New Growth Vector: ' + str(self.GV))
-        elif self.method == 'RMSR':  # Root mean square registration
+        elif self.method == 'TMIR':  # Template matching image registration
             # xy[spm, 0], xy[spm, 1] = ft(I[:, :, :, 1], False)  # Get the x and y position of the root tip
+            print('Sorry that method has not been developed yet')
+        elif self.method == 'PCIR':  # Phase Correlation Image
+            if t == 0:
+                self.dp = np.array([0, 0])
+            else:
+                self.dp = self.pcir(I, Im1)
             print('Sorry that method has not been developed yet')
         else:
             print('Something has gone wrong in selecting an image registration method')
