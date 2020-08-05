@@ -382,4 +382,4 @@ def ZEN_AI(optArg = 0):
 #     if sys.argv[1] == 'run':
 #         ZEN_AI()
 
-ZEN_AI()
+#  ZEN_AI()

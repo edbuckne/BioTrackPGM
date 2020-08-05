@@ -8,9 +8,13 @@ from sequence_class import sequence
 from registration_class import registration
 
 class config:
-    def __init__(self, sett, create=True, load=True):
+    def __init__(self, sett, create=True, load=True, configLoad = 'none'):
         self.sett = sett
         self.simulation = False  # Is true if the user is running a simulation
+        self.axialUnits = 1  # Default is microns (0 - nanometers, 1 - micrometers, 2 - millimeters)
+        self.lateralUnits = 1
+        self.imageFrequencyUnits = 1  # Default frequency is in minutes (0 - seconds, 1 - minutes, 2 - hours)
+        self.path = 'none'
         if create and not load:  # Create option means we are creating a new configuration if true
             self.name = input('Name this configuration: ')
             try:
@@ -92,6 +96,9 @@ class config:
             self.saveName = pickload.saveName
             self.path = pickload.path
             self.registration = pickload.registration
+            self.axialUnits = pickload.axialUnits
+            self.lateralUnits = pickload.lateralUnits
+            self.imageFrequencyUnits = pickload.imageFrequencyUnits
             try:  # channel was added later. Check and replace with a 1 if it isn't there'
                 self.registration[0].channel
             except NameError:
@@ -112,18 +119,34 @@ class config:
         elif load and not create:
             d = os.listdir('./mat/conf/')
 
-            count = 1
-            for file in d:
-                print(str(count) + '. ' + file)
-                count = count + 1
+            if configLoad == 'none':
+                count = 1
+                for file in d:
+                    print(str(count) + '. ' + file)
+                    count = count + 1
 
-            opt = eval(input('\n Pick a configuration: '))
+                opt = eval(input('\n Pick a configuration: '))
 
-            try:
-                configName = d[opt - 1]
-            except:
-                print('Error')
+                try:
+                    configName = d[opt - 1]
+                except:
+                    print('Error')
+                    return
+            elif configLoad == 'default':  # This just creates a blank config class
+                self.name = 'none'
+                self.sequence = []
+                self.expConfig = []
+                self.initConfig = []
+                self.saveName = 'none'
+                self.path = 'none'
+                self.registration = []
+                self.axialUnits = 1
+                self.lateralUnits = 1
+                self.imageFrequencyUnits = 1
+
                 return
+            else:
+                configName = configLoad
 
             # confDict = io.loadmat('./mat/conf/' + configName + '/config.mat')
             # self.click_regions = io.loadmat('./mat/conf/' + configName + '/click.mat')
@@ -147,6 +170,9 @@ class config:
             self.saveName = pickload.saveName
             self.path = pickload.path
             self.registration = pickload.registration
+            self.axialUnits = pickload.axialUnits
+            self.lateralUnits = pickload.lateralUnits
+            self.imageFrequencyUnits = pickload.imageFrequencyUnits
             try:  # channel was added later. Check and replace with a 1 if it isn't there'
                 self.registration[0].channel
             except NameError:
@@ -257,7 +283,7 @@ class config:
                 for spm in range(int(self.expConfig[0])):
                     self.registration[spm].method = reg_method
             elif opt == 12:  # Change the channel to do the image registration
-♣               newval = int(input('What do you want to change this value to? '))
+                newval = int(input('What do you want to change this value to? '))
                 for spm in range(int(self.expConfig[0])):
                     self.registration[spm].channel = newval
             else:  # Numeric options

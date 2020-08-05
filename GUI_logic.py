@@ -7,7 +7,7 @@ import sys
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPalette, QColor
-from PyQt5.QtWidgets import (QApplication, QComboBox, QDialog,
+from PyQt5.QtWidgets import (QApplication, QComboBox, QDialog, QMessageBox, QFileDialog,
                              QDialogButtonBox, QFormLayout, QGridLayout, QGroupBox, QHBoxLayout,
                              QLabel, QLineEdit, QMenu, QMenuBar, QPushButton, QSpinBox, QTextEdit,
                              QVBoxLayout, QWidget, QScrollBar, QScrollArea, QTreeWidgetItem)
@@ -15,7 +15,13 @@ from PyQt5.QtWidgets import (QApplication, QComboBox, QDialog,
 # Eli's custom functions
 from fun.dataHandle import loadConfigurationList
 from fun.dataHandle import loadSequenceList
+from registration_class import registration
+from bioTRACKai import run_experiment
 from setting_class import settings
+from config_class import config
+import numpy as np
+import pickle
+import os
 
 spec = 0  # global variable of number of specimens
 
@@ -51,9 +57,9 @@ class CustomDialog(QtWidgets.QDialog):
             form.addRow(QLabel(y))
             form.addRow(QLabel(x))
             form.addRow(QLabel("Initial X"), QLineEdit())
-            form.addRow(QLabel("X Guess"), QLineEdit())
+            form.addRow(QLabel("Initial X growth"), QLineEdit())
             form.addRow(QLabel("Initial Y"), QLineEdit())
-            form.addRow(QLabel("Y Guess"), QLineEdit())
+            form.addRow(QLabel("Initial Y growth"), QLineEdit())
             form.addRow(QLabel("Z1"), QLineEdit())
             form.addRow(QLabel("Z2"), QLineEdit())
 
@@ -79,13 +85,7 @@ class Ui(QtWidgets.QMainWindow):
         super(Ui, self).__init__()  # Call the inherited classes __init__ method
         uic.loadUi('TestGUIv2.ui', self)  # Load the .ui file
 
-        # Buttons and Connections
-        self.button = self.findChild(QtWidgets.QPushButton, 'save')  # Find the button with the name "save"
-        self.button.clicked.connect(self.saveButtonPressed)
-
-        self.button2 = self.findChild(QtWidgets.QPushButton, 'configbutton')
-        self.button2.clicked.connect(self.windowButtonPressed)
-
+        # Parsing the information of files available for loading into a selectable list
         # Tree Widget(s) and connections
         self.configTree = self.findChild(QtWidgets.QTreeWidget, 'configTree')
         self.configTree.itemDoubleClicked.connect(self.showitemConfig)
@@ -108,6 +108,20 @@ class Ui(QtWidgets.QMainWindow):
 
             self.sequenceTree.addTopLevelItem(item)
 
+        # Making connections in this code to the objects in the ui file
+        # Buttons and Connections
+        self.button = self.findChild(QtWidgets.QPushButton, 'save')  # Find the button with the name "save"
+        self.button.clicked.connect(self.saveButtonPressed)
+
+        self.button2 = self.findChild(QtWidgets.QPushButton, 'configbutton')
+        self.button2.clicked.connect(self.windowButtonPressed)
+
+        self.runSimButton = self.findChild(QtWidgets.QPushButton, 'pushButton_3')  # TODO change name in ui file to runSimButton
+        self.runSimButton.clicked.connect(self.runSimButtonPressed)
+
+        self.runExpButton = self.findChild(QtWidgets.QPushButton, 'pushButton_4')  # TODO change name in ui file to runExpButton
+        self.runExpButton.clicked.connect(self.runExpButtonPressed)
+
         # Text box names
         self.config = self.findChild(QtWidgets.QLineEdit, 'config')
         self.thresh = self.findChild(QtWidgets.QLineEdit, 'thresh')
@@ -118,6 +132,12 @@ class Ui(QtWidgets.QMainWindow):
         self.height = self.findChild(QtWidgets.QLineEdit, 'height')
         self.timestamps = self.findChild(QtWidgets.QLineEdit, 'timestamps')
         self.specimennum = self.findChild(QtWidgets.QLineEdit, 'specimennum')
+
+        # Drop down boxes
+        self.registrationDropDown = self.findChild(QtWidgets.QComboBox, 'comboBox')
+        self.zAxisUnits = self.findChild(QtWidgets.QComboBox, 'zAxisUnits')
+        self.xyResUnits = self.findChild(QtWidgets.QComboBox, 'xyResUnits')
+        self.imageFreqUnits = self.findChild(QtWidgets.QComboBox, 'imageFreqUnits')
 
         # Settings Children
         self.shiftCheckBox = self.findChild(QtWidgets.QCheckBox, 'shiftCheckBox')
@@ -131,34 +151,97 @@ class Ui(QtWidgets.QMainWindow):
         self.settingsSaveName = self.findChild(QtWidgets.QLineEdit, 'settingsSaveName')
         self.settingsLoadName = self.findChild(QtWidgets.QLineEdit, 'settingsLoadName')
 
-        # Sets text of predetermined settings on start only
-        # self.config.setText(preload[0])
-        # self.thresh.setText(preload[1])
-        # self.zres.setText(preload[2])
-        # self.xyres.setText(preload[3])
-        # self.imagefreq.setText(preload[4])
-        # self.width.setText(preload[5])
-        # self.height.setText(preload[6])
-        # self.timestamps.setText(preload[7])
-        # self.specimennum.setText(preload[8])
-
         # spec = self.specimennum.text()
         # spec = int(float(spec))
 
         self.show()  # Show the GUI
 
+    # This function is called when the save configuration button is pressed on the configuration page. It takes all of
+    # the information in the fields, creates a configuration object with that information, and saves/overwrites the
+    # file that holds that information.
     def saveButtonPressed(self):
+        conf = config(settings(), create=False, load=True, configLoad='default')
+        conf.name = self.config.text()
+
+        try:
+            exp_matrix = np.empty([8])
+            exp_matrix[0] = int(float(self.specimennum.text()))  # Number of specimen
+            exp_matrix[1] = int(float(self.height.text()))  # Height of image in pixels
+            exp_matrix[2] = int(float(self.width.text()))  # Width of image in pixels
+            exp_matrix[3] = float(self.xyres.text())  # Lateral resolution of pixels in microns
+            exp_matrix[4] = int(float(self.timestamps.text()))  # Number of images to take in the time course
+            exp_matrix[5] = int(float(self.imagefreq.text()))  # Frequency in capturing images in minutes
+            exp_matrix[6] = int(float(self.thresh.text()))  # 16-bit threshold value for determining what is GFP signal
+            exp_matrix[7] = float(self.zres.text())  # The axial resolutions of z-slices in microns
+            conf.expConfig = exp_matrix
+        except:
+            saveError = QMessageBox()
+            saveError.setText('An error has occurred during saving. Make sure all fields are filled')
+            saveError.exec()
+            return
+
+
+        registrationChannel = 1  # Need to collect the registration channel when this gets put in
+        regInd = self.registrationDropDown.currentIndex()  # Collect and save the registration method
+        for spm in range(int(exp_matrix[0])):
+            if regInd == 0:
+                conf.registration.append(registration('PMIR', registrationChannel))
+            elif regInd == 1:
+                conf.registration.append(registration('COMR', registrationChannel))
+            elif regInd == 2:
+                conf.registration.append(registration('RMSR', registrationChannel))
+
+        conf.axialUnits = self.zAxisUnits.currentIndex()  # Collect and save the indices for the units
+        conf.lateralUnits = self.xyResUnits.currentIndex()
+        conf.imageFrequencyUnits = self.imageFreqUnits.currentIndex()
+
+        if(os.path.isdir('./mat/conf/' + conf.name)):  # If this configuration already exists, overwrite it
+            os.remove('./mat/conf/' + conf.name + '/configclass.pkl')
+        else:  # Otherwise create a new file
+            os.mkdir('./mat/conf/' + conf.name)  # Create and save new configuration
+            item = QTreeWidgetItem()  # Update the list to include this item
+            item.setText(0, conf.name)  # file name
+            self.configTree.addTopLevelItem(item)
+        with open('./mat/conf/' + conf.name + '/configclass.pkl',
+                  'wb') as f:  # Creating a pickle file that is writable
+            pickle.dump(conf, f)
+        f.close()
+
         # This is executed when the button is pressed
-        global spec  # TODO add variables to save all the fields
+        global spec
         spec = self.specimennum.text()
         spec = int(float(spec))
-        x = "Configuration " + self.config.text() + " has been saved!"
-        print(x)
-        # TODO add method to constantly update GUI for live updating
-        # self.setupFile.addItem(self.config.text()) method 1
-        # item = QTreeWidgetItem method 2
-        # item.setText(0, self.config.text())
-        # item.setText(1, "?")
+
+        return conf
+
+
+    # This function runs when the run simulation button has been pressed. It saves the configuration currently entered
+    # into the fields, gathers them in a configuration object, and runs the simulation. If there is an error in running
+    # this, an error message is printed on the terminal.
+    def runSimButtonPressed(self):
+        file = str(QFileDialog.getExistingDirectory(self, 'Select directory where images will be saved'))
+        conf = self.saveButtonPressed()  # Save this current configuration
+        conf.path = file
+        try:
+            run_experiment(conf, 0, simulation=True)
+        except:
+            print('Error running simulation')
+            return
+
+
+    # This function runs when the run simulation button has been pressed. It saves the configuration currently entered
+    # into the fields, gathers them in a configuration object, and runs the simulation. If there is an error in running
+    # this, an error message is printed on the terminal.
+    def runExpButtonPressed(self):
+        file = str(QFileDialog.getExistingDirectory(self, 'Select directory where images will be saved'))
+        conf = self.saveButtonPressed()  # Save this current configuration
+        conf.path = file
+        try:
+            run_experiment(conf, 0, simulation=False)
+        except:
+            print('Error running experiment')
+            return
+
 
     def windowButtonPressed(self):
 
@@ -177,8 +260,33 @@ class Ui(QtWidgets.QMainWindow):
         else:
             print("Configuration Not Saved!")
 
+
+    # This function is called when an item from the pre-existing configuration list. That configuration's information
+    # is loaded into a configuration object and the information from the object is parsed into the fields on the GUI.
     def showitemConfig(self, item, column):
-        print("Config has been double clicked:", item.text(column))
+        sett = settings()
+        conf = config(sett, create=False, load=True, configLoad=item.text(column))
+
+        self.config.setText(conf.name)  # Parsing the data from the clicked object into the fields
+        self.thresh.setText(str(conf.expConfig[6]))
+        self.zres.setText(str(conf.expConfig[7]))
+        self.xyres.setText(str(conf.expConfig[3]))
+        self.imagefreq.setText(str(conf.expConfig[5]))
+        self.width.setText(str(conf.expConfig[1]))
+        self.height.setText(str(conf.expConfig[2]))
+        self.timestamps.setText(str(conf.expConfig[4]))
+        self.specimennum.setText(str(conf.expConfig[0]))
+
+        if conf.registration[0].method == 'PMIR':  # Set the drop down to match what is in the configuration file
+            self.registrationDropDown.setCurrentIndex(0)
+        elif conf.registration[0].method == 'COMR':
+            self.registrationDropDown.setCurrentIndex(1)
+        elif conf.registration[0].method == 'RMSR':
+            self.registrationDropDown.setCurrentIndex(2)
+
+        self.zAxisUnits.setCurrentIndex(conf.axialUnits)  # Set the units of the dropdowns for the units
+        self.xyResUnits.setCurrentIndex(conf.lateralUnits)
+        self.imageFreqUnits.setCurrentIndex(conf.imageFrequencyUnits)
         # TODO When an item is double clicked needs to update the boxes for settings and setup tabs
 
     def showitemSequence(self, item, column):
