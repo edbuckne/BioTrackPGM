@@ -2,7 +2,7 @@
 # Contains the logic to make interface be able to interact with rest of code/command prompt
 # Needs "TestGUIv2.ui" in same directory to work, XML type code
 
-from PyQt5 import QtWidgets, uic
+from PyQt5 import QtWidgets, uic, QtCore
 import sys
 
 from PyQt5.QtCore import Qt
@@ -26,9 +26,6 @@ import os
 spec = 0  # global variable of number of specimens
 
 
-#  preload = ["config", "threshold", "zres", "xyres", "imagefreq", "width", "height", "timestamps", "1"]
-
-
 class Color(QWidget):
 
     def __init__(self, color, *args, **kwargs):
@@ -40,34 +37,73 @@ class Color(QWidget):
         self.setPalette(palette)
 
 
-class CustomDialog(QtWidgets.QDialog):
+class specimenConfigDialog(QtWidgets.QDialog):
 
-    def __init__(self, *args, **kwargs):
-        super(CustomDialog, self).__init__(*args, **kwargs)
+    def saveSpecConfigButtonPressed(self):
+        print("Fake Saved")
+
+    def cancelSpecConfigButtonPressed(self):
+        self.close()
+
+    def __init__(self, specimen=None, *args, **kwargs):
+        super(specimenConfigDialog, self).__init__(*args, **kwargs)
 
         form = QFormLayout()
+        # formBig = QFormLayout()
+        # vertical = QVBoxLayout
+
+        # self.setLayout(formBig)
+        # self.addrow(form, vertical)
 
         self.setWindowTitle("Specimen Configuration")
 
         groupBox = QGroupBox("")
 
         for i in range(0, spec):
-            y = " "
-            x = "Specimen " + str(i + 1)
-            form.addRow(QLabel(y))
-            form.addRow(QLabel(x))
+            blank = QLabel(" ")
+            specName = QLabel("Specimen " + str(i + 1))
+            sequence = QLabel("Sequence")
+            seqList = QComboBox()
+            sequencelist = loadSequenceList()
+            for x in range(0, len(sequencelist)):  # sequenceTree Tree Widget
+                seqList.addItem(sequencelist[x])
+            # TODO add incrementing way to variables so unique
+            form.addRow(blank)
+            form.addRow(specName)
             form.addRow(QLabel("Initial X"), QLineEdit())
             form.addRow(QLabel("Initial X growth"), QLineEdit())
             form.addRow(QLabel("Initial Y"), QLineEdit())
             form.addRow(QLabel("Initial Y growth"), QLineEdit())
             form.addRow(QLabel("Z1"), QLineEdit())
             form.addRow(QLabel("Z2"), QLineEdit())
+            form.addRow(sequence, seqList)
 
             self.setLayout(form)
-        cancelSpecConfig = QPushButton("Cancel")
-        saveSpecConfig = QPushButton("Save")
-        form.addRow(cancelSpecConfig, saveSpecConfig)  # TODO Connect buttons to action
+        # x = QComboBox()
+        # x.addItem(self, "nm")
+        # x.addItem(self, "um")
+        # x.addItem(self, "mm")
+        # for i in range(0, spec):
+        #     y = QLabel(" ")
+        #     vertical.addWidget(y)
+        #     vertical.addWidget(y)
+        #     vertical.addWidget(x)
+        #     vertical.addWidget(x)
+        #     vertical.addWidget(x)
+        #     vertical.addWidget(x)
+        #     vertical.addWidget(x)
+        #     vertical.addWidget(x)
+        #     vertical.addWidget(y)
 
+        self.cancelSpecConfig = QPushButton("Cancel")
+        self.saveSpecConfig = QPushButton("Save")
+        form.addRow(self.cancelSpecConfig, self.saveSpecConfig)
+
+        # Signals
+        self.saveSpecConfig.clicked.connect(self.saveSpecConfigButtonPressed)
+        self.cancelSpecConfig.clicked.connect(self.cancelSpecConfigButtonPressed)
+
+        # Layout and Scroll Area
         groupBox.setLayout(form)
         scroll = QScrollArea()
         scroll.setWidget(groupBox)
@@ -75,6 +111,7 @@ class CustomDialog(QtWidgets.QDialog):
         layout = QVBoxLayout(self)
         layout.addWidget(scroll)
 
+        # Shows GUI
         self.show()
 
 
@@ -89,6 +126,7 @@ class Ui(QtWidgets.QMainWindow):
         # Tree Widget(s) and connections
         self.configTree = self.findChild(QtWidgets.QTreeWidget, 'configTree')
         self.configTree.itemDoubleClicked.connect(self.showitemConfig)
+        self.configTree.itemClicked.connect(self.deleteKeyItemConfig)
 
         self.sequenceTree = self.findChild(QtWidgets.QTreeWidget, 'sequenceTree')
         self.sequenceTree.itemDoubleClicked.connect(self.showitemSequence)
@@ -110,16 +148,16 @@ class Ui(QtWidgets.QMainWindow):
 
         # Making connections in this code to the objects in the ui file
         # Buttons and Connections
-        self.button = self.findChild(QtWidgets.QPushButton, 'save')  # Find the button with the name "save"
+        self.button = self.findChild(QtWidgets.QPushButton, 'save')
         self.button.clicked.connect(self.saveButtonPressed)
 
-        self.button2 = self.findChild(QtWidgets.QPushButton, 'configbutton')
+        self.button2 = self.findChild(QtWidgets.QPushButton, 'configButton')
         self.button2.clicked.connect(self.windowButtonPressed)
 
-        self.runSimButton = self.findChild(QtWidgets.QPushButton, 'pushButton_3')  # TODO change name in ui file to runSimButton
+        self.runSimButton = self.findChild(QtWidgets.QPushButton, 'runSimButton')
         self.runSimButton.clicked.connect(self.runSimButtonPressed)
 
-        self.runExpButton = self.findChild(QtWidgets.QPushButton, 'pushButton_4')  # TODO change name in ui file to runExpButton
+        self.runExpButton = self.findChild(QtWidgets.QPushButton, 'runExpButton')
         self.runExpButton.clicked.connect(self.runExpButtonPressed)
 
         # Text box names
@@ -132,6 +170,7 @@ class Ui(QtWidgets.QMainWindow):
         self.height = self.findChild(QtWidgets.QLineEdit, 'height')
         self.timestamps = self.findChild(QtWidgets.QLineEdit, 'timestamps')
         self.specimennum = self.findChild(QtWidgets.QLineEdit, 'specimennum')
+        self.microChannel = self.findChild(QtWidgets.QLineEdit, 'microChannel')
 
         # Drop down boxes
         self.registrationDropDown = self.findChild(QtWidgets.QComboBox, 'comboBox')
@@ -151,10 +190,8 @@ class Ui(QtWidgets.QMainWindow):
         self.settingsSaveName = self.findChild(QtWidgets.QLineEdit, 'settingsSaveName')
         self.settingsLoadName = self.findChild(QtWidgets.QLineEdit, 'settingsLoadName')
 
-        # spec = self.specimennum.text()
-        # spec = int(float(spec))
-
-        self.show()  # Show the GUI
+        # Show the GUI
+        self.show()
 
     # This function is called when the save configuration button is pressed on the configuration page. It takes all of
     # the information in the fields, creates a configuration object with that information, and saves/overwrites the
@@ -174,12 +211,11 @@ class Ui(QtWidgets.QMainWindow):
             exp_matrix[6] = int(float(self.thresh.text()))  # 16-bit threshold value for determining what is GFP signal
             exp_matrix[7] = float(self.zres.text())  # The axial resolutions of z-slices in microns
             conf.expConfig = exp_matrix
-        except:
+        except(ValueError, Exception):
             saveError = QMessageBox()
             saveError.setText('An error has occurred during saving. Make sure all fields are filled')
             saveError.exec()
             return
-
 
         registrationChannel = 1  # Need to collect the registration channel when this gets put in
         regInd = self.registrationDropDown.currentIndex()  # Collect and save the registration method
@@ -195,7 +231,7 @@ class Ui(QtWidgets.QMainWindow):
         conf.lateralUnits = self.xyResUnits.currentIndex()
         conf.imageFrequencyUnits = self.imageFreqUnits.currentIndex()
 
-        if(os.path.isdir('./mat/conf/' + conf.name)):  # If this configuration already exists, overwrite it
+        if (os.path.isdir('./mat/conf/' + conf.name)):  # If this configuration already exists, overwrite it
             os.remove('./mat/conf/' + conf.name + '/configclass.pkl')
         else:  # Otherwise create a new file
             os.mkdir('./mat/conf/' + conf.name)  # Create and save new configuration
@@ -207,27 +243,24 @@ class Ui(QtWidgets.QMainWindow):
             pickle.dump(conf, f)
         f.close()
 
-        # This is executed when the button is pressed
         global spec
         spec = self.specimennum.text()
         spec = int(float(spec))
 
         return conf
 
-
     # This function runs when the run simulation button has been pressed. It saves the configuration currently entered
     # into the fields, gathers them in a configuration object, and runs the simulation. If there is an error in running
     # this, an error message is printed on the terminal.
     def runSimButtonPressed(self):
         file = str(QFileDialog.getExistingDirectory(self, 'Select directory where images will be saved'))
-        conf = self.saveButtonPressed()  # Save this current configuration
+        conf = self.saveButtonPressed()
         conf.path = file
         try:
             run_experiment(conf, 0, simulation=True)
-        except:
+        except(ValueError, Exception):  # TODO Make this dialog or sound?
             print('Error running simulation')
             return
-
 
     # This function runs when the run simulation button has been pressed. It saves the configuration currently entered
     # into the fields, gathers them in a configuration object, and runs the simulation. If there is an error in running
@@ -238,10 +271,9 @@ class Ui(QtWidgets.QMainWindow):
         conf.path = file
         try:
             run_experiment(conf, 0, simulation=False)
-        except:
-            print('Error running experiment')
+        except(ValueError, Exception):
+            print('Error running experiment')  # TODO Make this dialog or sound?
             return
-
 
     def windowButtonPressed(self):
 
@@ -249,17 +281,18 @@ class Ui(QtWidgets.QMainWindow):
         try:
             spec = self.specimennum.text()
             spec = int(float(spec))
+
+            dlg = specimenConfigDialog(self)
+
+            if dlg.exec_():
+                print("Configuration Saved!")  # TODO Make this dialog or sound?
+            else:
+                print("Configuration Not Saved!")  # TODO Make this dialog or sound?
         except(ValueError, Exception):
-            print("Put a valid integer for Specimen Number")  # TODO Make this dialog box
-            spec = 0
-
-        dlg = CustomDialog(self)
-
-        if dlg.exec_():
-            print("Configuration Saved!")
-        else:
-            print("Configuration Not Saved!")
-
+            saveError = QMessageBox()
+            saveError.setText('Enter a Valid Number For Specimen Amount')
+            saveError.exec()
+            return
 
     # This function is called when an item from the pre-existing configuration list. That configuration's information
     # is loaded into a configuration object and the information from the object is parsed into the fields on the GUI.
@@ -291,6 +324,13 @@ class Ui(QtWidgets.QMainWindow):
 
     def showitemSequence(self, item, column):
         print("Sequence has been double clicked:", item.text(column))
+
+    def deleteKeyItemConfig(self, item, column):  # TODO Fix the key method and add right click menu
+        print("Config has been clicked:", item.text(column))
+    #  if item.key() == Qt.Key_Delete:
+    #     self.configTree.removeItemWidget(item, column)
+    #  elif item.key() == Qt.Key_Backspace:
+    #     self.configTree.removeItemWidget(item, column)
 
 
 app = QtWidgets.QApplication(sys.argv)  # Create an instance of QtWidgets.QApplication

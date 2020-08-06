@@ -49,52 +49,20 @@
           </item>
           <item row="0" column="1" rowspan="2">
            <layout class="QGridLayout" name="gridLayout_6">
-            <item row="10" column="1">
-             <widget class="QComboBox" name="comboBox">
-              <item>
-               <property name="text">
-                <string>Point matching image registration (PMIR)</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Center of mass registration (CMOR)</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Trained root mean square registration (RMSR)</string>
-               </property>
-              </item>
+            <item row="2" column="1">
+             <widget class="QLineEdit" name="zres">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
              </widget>
             </item>
-            <item row="5" column="0">
-             <widget class="QLabel" name="label_6">
+            <item row="6" column="2">
+             <widget class="QLabel" name="label_32">
               <property name="text">
-               <string>Image Width:</string>
-              </property>
-              <property name="buddy">
-               <cstring>width</cstring>
-              </property>
-             </widget>
-            </item>
-            <item row="8" column="1">
-             <widget class="QLineEdit" name="specimennum">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="1">
-             <widget class="QLineEdit" name="timestamps">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
+               <string>Px</string>
               </property>
              </widget>
             </item>
@@ -108,129 +76,8 @@
               </property>
              </widget>
             </item>
-            <item row="7" column="0">
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>Time Stamps:</string>
-              </property>
-              <property name="buddy">
-               <cstring>timestamps</cstring>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLineEdit" name="config">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-             </widget>
-            </item>
-            <item row="9" column="0" colspan="2">
-             <widget class="QPushButton" name="configbutton">
-              <property name="text">
-               <string>Specimen Configurations</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QLineEdit" name="xyres">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-             </widget>
-            </item>
-            <item row="8" column="0">
-             <widget class="QLabel" name="label_2">
-              <property name="text">
-               <string>Number of Specimen(s):</string>
-              </property>
-              <property name="buddy">
-               <cstring>specimennum</cstring>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="0">
-             <widget class="QLabel" name="label_5">
-              <property name="text">
-               <string>Image Height:</string>
-              </property>
-              <property name="buddy">
-               <cstring>height</cstring>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QLineEdit" name="thresh">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="2">
-             <widget class="QLabel" name="label_27">
-              <property name="text">
-               <string>Px</string>
-              </property>
-             </widget>
-            </item>
-            <item row="10" column="0">
-             <widget class="QLabel" name="label_25">
-              <property name="text">
-               <string>Registration Method:</string>
-              </property>
-              <property name="buddy">
-               <cstring>comboBox</cstring>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label">
-              <property name="text">
-               <string>Configuration  Name:</string>
-              </property>
-              <property name="buddy">
-               <cstring>config</cstring>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="2">
-             <widget class="QLabel" name="label_32">
-              <property name="text">
-               <string>Px</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="1">
-             <widget class="QLineEdit" name="imagefreq">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-             </widget>
-            </item>
             <item row="6" column="1">
              <widget class="QLineEdit" name="height">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QLineEdit" name="zres">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -249,6 +96,16 @@
               </property>
              </widget>
             </item>
+            <item row="5" column="0">
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>Image Width:</string>
+              </property>
+              <property name="buddy">
+               <cstring>width</cstring>
+              </property>
+             </widget>
+            </item>
             <item row="1" column="0">
              <widget class="QLabel" name="label_9">
               <property name="text">
@@ -256,6 +113,101 @@
               </property>
               <property name="buddy">
                <cstring>thresh</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QLineEdit" name="imagefreq">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="1">
+             <widget class="QLineEdit" name="timestamps">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="QComboBox" name="zAxisUnits">
+              <item>
+               <property name="text">
+                <string>nm</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>um</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>mm</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="8" column="1">
+             <widget class="QLineEdit" name="specimennum">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="inputMethodHints">
+               <set>Qt::ImhDigitsOnly</set>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="2">
+             <widget class="QLabel" name="label_27">
+              <property name="text">
+               <string>Px</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="0">
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>Time Stamps:</string>
+              </property>
+              <property name="buddy">
+               <cstring>timestamps</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="10" column="1">
+             <widget class="QComboBox" name="comboBox">
+              <item>
+               <property name="text">
+                <string>Point matching image registration (PMIR)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Center of mass registration (COMR)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Trained root mean square registration (RMSR)</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="9" column="0" colspan="2">
+             <widget class="QPushButton" name="configButton">
+              <property name="text">
+               <string>Specimen Configurations</string>
               </property>
              </widget>
             </item>
@@ -269,6 +221,45 @@
               </property>
              </widget>
             </item>
+            <item row="8" column="0">
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>Number of Specimen(s):</string>
+              </property>
+              <property name="buddy">
+               <cstring>specimennum</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="10" column="0">
+             <widget class="QLabel" name="label_25">
+              <property name="text">
+               <string>Registration Method:</string>
+              </property>
+              <property name="buddy">
+               <cstring>comboBox</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="2">
+             <widget class="QComboBox" name="xyResUnits">
+              <item>
+               <property name="text">
+                <string>nm</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>um</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>mm</string>
+               </property>
+              </item>
+             </widget>
+            </item>
             <item row="4" column="0">
              <widget class="QLabel" name="label_4">
               <property name="text">
@@ -276,6 +267,56 @@
               </property>
               <property name="buddy">
                <cstring>imagefreq</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="0">
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>Image Height:</string>
+              </property>
+              <property name="buddy">
+               <cstring>height</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QLineEdit" name="xyres">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="thresh">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="config">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>Configuration  Name:</string>
+              </property>
+              <property name="buddy">
+               <cstring>config</cstring>
               </property>
              </widget>
             </item>
@@ -298,43 +339,15 @@
               </item>
              </widget>
             </item>
-            <item row="2" column="2">
-             <widget class="QComboBox" name="zAxisUnits">
-              <item>
-               <property name="text">
-                <string>nm</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>um</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>mm</string>
-               </property>
-              </item>
+            <item row="11" column="0">
+             <widget class="QLabel" name="label_28">
+              <property name="text">
+               <string>Microscope Channel:</string>
+              </property>
              </widget>
             </item>
-            <item row="3" column="2">
-             <widget class="QComboBox" name="xyResUnits">
-              <item>
-               <property name="text">
-                <string>nm</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>um</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>mm</string>
-               </property>
-              </item>
-             </widget>
+            <item row="11" column="1">
+             <widget class="QLineEdit" name="microChannel"/>
             </item>
            </layout>
           </item>
@@ -342,6 +355,9 @@
            <layout class="QGridLayout" name="gridLayout_5">
             <item row="0" column="0">
              <widget class="QTreeWidget" name="configTree">
+              <property name="contextMenuPolicy">
+               <enum>Qt::ActionsContextMenu</enum>
+              </property>
               <column>
                <property name="text">
                 <string>File</string>
@@ -361,7 +377,7 @@
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QPushButton" name="pushButton_3">
+             <widget class="QPushButton" name="runSimButton">
               <property name="text">
                <string>Run Simulation</string>
               </property>
@@ -375,7 +391,7 @@
              </widget>
             </item>
             <item row="1" column="2">
-             <widget class="QPushButton" name="pushButton_4">
+             <widget class="QPushButton" name="runExpButton">
               <property name="text">
                <string>Run Experiment</string>
               </property>
@@ -384,7 +400,7 @@
             <item row="1" column="6">
              <widget class="QPushButton" name="clear">
               <property name="text">
-               <string>Clear Settings</string>
+               <string>Clear Configuration Settings</string>
               </property>
              </widget>
             </item>
@@ -398,7 +414,7 @@
             <item row="1" column="4">
              <widget class="QPushButton" name="save">
               <property name="text">
-               <string>Save Settings</string>
+               <string>Save Configuration Settings</string>
               </property>
              </widget>
             </item>
@@ -469,7 +485,17 @@
           <item row="0" column="1">
            <layout class="QGridLayout" name="gridLayout_11">
             <item row="1" column="0">
-             <widget class="QListWidget" name="listWidget"/>
+             <widget class="QListWidget" name="sequenceBuildArea">
+              <property name="dragEnabled">
+               <bool>true</bool>
+              </property>
+              <property name="dragDropMode">
+               <enum>QAbstractItemView::DragDrop</enum>
+              </property>
+              <property name="alternatingRowColors">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
             <item row="0" column="0">
              <widget class="QLabel" name="label_30">
@@ -484,23 +510,23 @@
             <item row="2" column="0">
              <layout class="QHBoxLayout" name="horizontalLayout_2">
               <item>
-               <widget class="QPushButton" name="pushButton_6">
+               <widget class="QPushButton" name="clearSequence">
                 <property name="text">
-                 <string>Clear</string>
+                 <string>Clear Sequence</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton">
+               <widget class="QPushButton" name="saveAsSequence">
                 <property name="text">
-                 <string>Save As</string>
+                 <string>Save Sequence As</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_5">
+               <widget class="QPushButton" name="saveSequence">
                 <property name="text">
-                 <string>Save</string>
+                 <string>Save Sequence</string>
                 </property>
                </widget>
               </item>
@@ -540,28 +566,37 @@
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_6">
                  <item>
-                  <widget class="QLabel" name="label_37">
-                   <property name="text">
-                    <string>Action 2</string>
+                  <widget class="QLabel" name="action1">
+                   <property name="acceptDrops">
+                    <bool>true</bool>
                    </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="label_31">
                    <property name="text">
                     <string>Action 1</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLabel" name="label_33">
+                  <widget class="QLabel" name="action2">
+                   <property name="acceptDrops">
+                    <bool>true</bool>
+                   </property>
+                   <property name="text">
+                    <string>Action 2</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="action3">
+                   <property name="acceptDrops">
+                    <bool>true</bool>
+                   </property>
                    <property name="text">
                     <string>Action 3</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLabel" name="label_28">
+                  <widget class="QLabel" name="action4">
                    <property name="acceptDrops">
                     <bool>true</bool>
                    </property>
@@ -571,7 +606,10 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLabel" name="label_34">
+                  <widget class="QLabel" name="action5">
+                   <property name="acceptDrops">
+                    <bool>true</bool>
+                   </property>
                    <property name="text">
                     <string>Action 5</string>
                    </property>
@@ -942,8 +980,8 @@
      <y>317</y>
     </hint>
     <hint type="destinationlabel">
-     <x>504</x>
-     <y>43</y>
+     <x>438</x>
+     <y>52</y>
     </hint>
    </hints>
   </connection>
@@ -954,8 +992,8 @@
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>186</x>
-     <y>149</y>
+     <x>229</x>
+     <y>163</y>
     </hint>
     <hint type="destinationlabel">
      <x>129</x>
@@ -970,12 +1008,12 @@
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>503</x>
-     <y>324</y>
+     <x>483</x>
+     <y>321</y>
     </hint>
     <hint type="destinationlabel">
-     <x>484</x>
-     <y>93</y>
+     <x>438</x>
+     <y>76</y>
     </hint>
    </hints>
   </connection>
@@ -986,12 +1024,12 @@
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>514</x>
+     <x>483</x>
      <y>321</y>
     </hint>
     <hint type="destinationlabel">
-     <x>527</x>
-     <y>185</y>
+     <x>438</x>
+     <y>196</y>
     </hint>
    </hints>
   </connection>
@@ -1002,8 +1040,8 @@
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>239</x>
-     <y>177</y>
+     <x>229</x>
+     <y>188</y>
     </hint>
     <hint type="destinationlabel">
      <x>136</x>
@@ -1018,8 +1056,8 @@
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>131</x>
-     <y>145</y>
+     <x>156</x>
+     <y>163</y>
     </hint>
     <hint type="destinationlabel">
      <x>205</x>
@@ -1050,12 +1088,12 @@
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>573</x>
-     <y>319</y>
+     <x>483</x>
+     <y>321</y>
     </hint>
     <hint type="destinationlabel">
-     <x>543</x>
-     <y>133</y>
+     <x>438</x>
+     <y>124</y>
     </hint>
    </hints>
   </connection>
@@ -1066,12 +1104,12 @@
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>504</x>
-     <y>316</y>
+     <x>483</x>
+     <y>321</y>
     </hint>
     <hint type="destinationlabel">
-     <x>482</x>
-     <y>156</y>
+     <x>438</x>
+     <y>148</y>
     </hint>
    </hints>
   </connection>
@@ -1082,12 +1120,12 @@
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>506</x>
-     <y>315</y>
+     <x>483</x>
+     <y>321</y>
     </hint>
     <hint type="destinationlabel">
-     <x>513</x>
-     <y>118</y>
+     <x>438</x>
+     <y>100</y>
     </hint>
    </hints>
   </connection>
@@ -1098,12 +1136,12 @@
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>535</x>
-     <y>320</y>
+     <x>483</x>
+     <y>321</y>
     </hint>
     <hint type="destinationlabel">
-     <x>555</x>
-     <y>204</y>
+     <x>438</x>
+     <y>220</y>
     </hint>
    </hints>
   </connection>
@@ -1130,12 +1168,12 @@
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>500</x>
-     <y>320</y>
+     <x>483</x>
+     <y>321</y>
     </hint>
     <hint type="destinationlabel">
-     <x>495</x>
-     <y>231</y>
+     <x>438</x>
+     <y>244</y>
     </hint>
    </hints>
   </connection>
@@ -1146,12 +1184,12 @@
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>577</x>
-     <y>316</y>
+     <x>483</x>
+     <y>321</y>
     </hint>
     <hint type="destinationlabel">
-     <x>566</x>
-     <y>66</y>
+     <x>438</x>
+     <y>172</y>
     </hint>
    </hints>
   </connection>
@@ -1166,8 +1204,8 @@
      <y>175</y>
     </hint>
     <hint type="destinationlabel">
-     <x>194</x>
-     <y>174</y>
+     <x>229</x>
+     <y>188</y>
     </hint>
    </hints>
   </connection>
