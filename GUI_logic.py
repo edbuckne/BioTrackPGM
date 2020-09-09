@@ -4,13 +4,13 @@
 
 from PyQt5 import QtWidgets, uic, QtCore
 import sys
-
+# import sip
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPalette, QColor
 from PyQt5.QtWidgets import (QApplication, QComboBox, QDialog, QMessageBox, QFileDialog,
                              QDialogButtonBox, QFormLayout, QGridLayout, QGroupBox, QHBoxLayout,
                              QLabel, QLineEdit, QMenu, QMenuBar, QPushButton, QSpinBox, QTextEdit,
-                             QVBoxLayout, QWidget, QScrollBar, QScrollArea, QTreeWidgetItem)
+                             QVBoxLayout, QWidget, QScrollBar, QScrollArea, QTreeWidgetItem, QAction)
 
 # Eli's custom functions
 from fun.dataHandle import loadConfigurationList
@@ -23,7 +23,9 @@ import numpy as np
 import pickle
 import os
 
-spec = 0  # global variable of number of specimens
+spec = 0  # total number of specimens
+widgetNum = 0  # total number of widgets for specimen window
+splits = 0  # total number of splits of array for specimen window
 
 
 class Color(QWidget):
@@ -40,7 +42,21 @@ class Color(QWidget):
 class specimenConfigDialog(QtWidgets.QDialog):
 
     def saveSpecConfigButtonPressed(self):
-        print("Fake Saved")
+        specInfo = [0]*widgetNum
+        global splits
+        for i in range(0, widgetNum):
+            if i % 9 == 8:
+                splits = splits + 1
+                widgInfo = self.form.itemAt(i, 1).widget()
+                widgTxt = widgInfo.currentText()
+                specInfo[i] = widgTxt
+                continue
+            widgInfo = self.form.itemAt(i, 1).widget()
+            widgTxt = widgInfo.text()
+            specInfo[i] = widgTxt
+        specInfoParsed = np.array_split(specInfo, splits)
+        print(specInfoParsed)
+        self.close()
 
     def cancelSpecConfigButtonPressed(self):
         self.close()
@@ -48,7 +64,7 @@ class specimenConfigDialog(QtWidgets.QDialog):
     def __init__(self, specimen=None, *args, **kwargs):
         super(specimenConfigDialog, self).__init__(*args, **kwargs)
 
-        form = QFormLayout()
+        self.form = QFormLayout()
         # formBig = QFormLayout()
         # vertical = QVBoxLayout
 
@@ -59,6 +75,8 @@ class specimenConfigDialog(QtWidgets.QDialog):
 
         groupBox = QGroupBox("")
 
+        global widgetNum
+
         for i in range(0, spec):
             blank = QLabel(" ")
             specName = QLabel("Specimen " + str(i + 1))
@@ -67,18 +85,19 @@ class specimenConfigDialog(QtWidgets.QDialog):
             sequencelist = loadSequenceList()
             for x in range(0, len(sequencelist)):  # sequenceTree Tree Widget
                 seqList.addItem(sequencelist[x])
-            # TODO add incrementing way to variables so unique
-            form.addRow(blank)
-            form.addRow(specName)
-            form.addRow(QLabel("Initial X"), QLineEdit())
-            form.addRow(QLabel("Initial X growth"), QLineEdit())
-            form.addRow(QLabel("Initial Y"), QLineEdit())
-            form.addRow(QLabel("Initial Y growth"), QLineEdit())
-            form.addRow(QLabel("Z1"), QLineEdit())
-            form.addRow(QLabel("Z2"), QLineEdit())
-            form.addRow(sequence, seqList)
+            self.form.addRow(blank)
+            self.form.addRow(specName)
+            self.form.addRow(QLabel("Initial X"), QLineEdit())
+            self.form.addRow(QLabel("Initial X growth"), QLineEdit())
+            self.form.addRow(QLabel("Initial Y"), QLineEdit())
+            self.form.addRow(QLabel("Initial Y growth"), QLineEdit())
+            self.form.addRow(QLabel("Z1"), QLineEdit())
+            self.form.addRow(QLabel("Z2"), QLineEdit())
+            self.form.addRow(sequence, seqList)
 
-            self.setLayout(form)
+            widgetNum = widgetNum + 9
+
+            self.setLayout(self.form)
         # x = QComboBox()
         # x.addItem(self, "nm")
         # x.addItem(self, "um")
@@ -97,14 +116,14 @@ class specimenConfigDialog(QtWidgets.QDialog):
 
         self.cancelSpecConfig = QPushButton("Cancel")
         self.saveSpecConfig = QPushButton("Save")
-        form.addRow(self.cancelSpecConfig, self.saveSpecConfig)
+        self.form.addRow(self.cancelSpecConfig, self.saveSpecConfig)
 
         # Signals
         self.saveSpecConfig.clicked.connect(self.saveSpecConfigButtonPressed)
         self.cancelSpecConfig.clicked.connect(self.cancelSpecConfigButtonPressed)
 
         # Layout and Scroll Area
-        groupBox.setLayout(form)
+        groupBox.setLayout(self.form)
         scroll = QScrollArea()
         scroll.setWidget(groupBox)
         scroll.setWidgetResizable(True)
@@ -189,6 +208,10 @@ class Ui(QtWidgets.QMainWindow):
         self.zNegCheckBox = self.findChild(QtWidgets.QCheckBox, 'zNegCheckBox')
         self.settingsSaveName = self.findChild(QtWidgets.QLineEdit, 'settingsSaveName')
         self.settingsLoadName = self.findChild(QtWidgets.QLineEdit, 'settingsLoadName')
+
+        # Context menu
+        self.configTree.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        self.configTree.customContextMenuRequested.connect(self.menuContextConfigTree)
 
         # Show the GUI
         self.show()
@@ -283,11 +306,8 @@ class Ui(QtWidgets.QMainWindow):
             spec = int(float(spec))
 
             dlg = specimenConfigDialog(self)
+            dlg.exec_()
 
-            if dlg.exec_():
-                print("Configuration Saved!")  # TODO Make this dialog or sound?
-            else:
-                print("Configuration Not Saved!")  # TODO Make this dialog or sound?
         except(ValueError, Exception):
             saveError = QMessageBox()
             saveError.setText('Enter a Valid Number For Specimen Amount')
@@ -297,40 +317,75 @@ class Ui(QtWidgets.QMainWindow):
     # This function is called when an item from the pre-existing configuration list. That configuration's information
     # is loaded into a configuration object and the information from the object is parsed into the fields on the GUI.
     def showitemConfig(self, item, column):
-        sett = settings()
-        conf = config(sett, create=False, load=True, configLoad=item.text(column))
+        try:
+            sett = settings()
+            conf = config(sett, create=False, load=True, configLoad=item.text(column))
 
-        self.config.setText(conf.name)  # Parsing the data from the clicked object into the fields
-        self.thresh.setText(str(conf.expConfig[6]))
-        self.zres.setText(str(conf.expConfig[7]))
-        self.xyres.setText(str(conf.expConfig[3]))
-        self.imagefreq.setText(str(conf.expConfig[5]))
-        self.width.setText(str(conf.expConfig[1]))
-        self.height.setText(str(conf.expConfig[2]))
-        self.timestamps.setText(str(conf.expConfig[4]))
-        self.specimennum.setText(str(conf.expConfig[0]))
+            self.config.setText(conf.name)  # Parsing the data from the clicked object into the fields
+            self.thresh.setText(str(conf.expConfig[6]))
+            self.zres.setText(str(conf.expConfig[7]))
+            self.xyres.setText(str(conf.expConfig[3]))
+            self.imagefreq.setText(str(conf.expConfig[5]))
+            self.width.setText(str(conf.expConfig[1]))
+            self.height.setText(str(conf.expConfig[2]))
+            self.timestamps.setText(str(conf.expConfig[4]))
+            self.specimennum.setText(str(conf.expConfig[0]))
 
-        if conf.registration[0].method == 'PMIR':  # Set the drop down to match what is in the configuration file
-            self.registrationDropDown.setCurrentIndex(0)
-        elif conf.registration[0].method == 'COMR':
-            self.registrationDropDown.setCurrentIndex(1)
-        elif conf.registration[0].method == 'RMSR':
-            self.registrationDropDown.setCurrentIndex(2)
+            if conf.registration[0].method == 'PMIR':  # Set the drop down to match what is in the configuration file
+                self.registrationDropDown.setCurrentIndex(0)
+            elif conf.registration[0].method == 'COMR':
+                self.registrationDropDown.setCurrentIndex(1)
+            elif conf.registration[0].method == 'RMSR':
+                self.registrationDropDown.setCurrentIndex(2)
 
-        self.zAxisUnits.setCurrentIndex(conf.axialUnits)  # Set the units of the dropdowns for the units
-        self.xyResUnits.setCurrentIndex(conf.lateralUnits)
-        self.imageFreqUnits.setCurrentIndex(conf.imageFrequencyUnits)
-        # TODO When an item is double clicked needs to update the boxes for settings and setup tabs
+            self.zAxisUnits.setCurrentIndex(conf.axialUnits)  # Set the units of the dropdowns for the units
+            self.xyResUnits.setCurrentIndex(conf.lateralUnits)
+            self.imageFreqUnits.setCurrentIndex(conf.imageFrequencyUnits)
+        except(ValueError, Exception):
+            print("config load failed")
+    # TODO When an item is double clicked needs to update the boxes for settings and setup tabs
 
     def showitemSequence(self, item, column):
         print("Sequence has been double clicked:", item.text(column))
 
     def deleteKeyItemConfig(self, item, column):  # TODO Fix the key method and add right click menu
-        print("Config has been clicked:", item.text(column))
+        print("Config has been clicked: " + item.text(column))
+
+    def test(self):
+        print("delete key pressed")
+
     #  if item.key() == Qt.Key_Delete:
     #     self.configTree.removeItemWidget(item, column)
     #  elif item.key() == Qt.Key_Backspace:
     #     self.configTree.removeItemWidget(item, column)
+
+    def menuContextConfigTree(self, point):  # TODO fix menu from crashing GUI
+        try:
+            # Info about the node selected.
+            listItem = self.configTree.indexAt(point)
+
+            if not listItem.isValid():
+                return
+
+            index = listItem.row()
+
+            item = self.configTree.itemAt(point)
+
+            name = item.text(0)  # The text of the node.
+
+            # Build the menu.
+            menu = QtWidgets.QMenu(self)
+            actionDel = menu.addAction("Delete")
+            actionQuit = menu.addAction("Close Menu")
+
+            menu.exec_(self.configTree.mapToGlobal(point))
+
+            # Connect the actions to methods
+            actionDel.triggered.connect(self.deleteKeyItemConfig(name, index))
+            # actionQuit.triggered.connect(menu.close())
+
+        except(ValueError, Exception):
+            print("menu failed")
 
 
 app = QtWidgets.QApplication(sys.argv)  # Create an instance of QtWidgets.QApplication
