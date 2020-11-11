@@ -22,6 +22,8 @@ import numpy as np
 import pickle
 import os
 
+# TODO Actually test the software over a long period of time? Like a day or two of run time?? Idk GUI may do weird thing
+
 spec = 0  # total number of specimens
 widgetNum = 0  # total number of widgets for specimen window
 splits = 0  # total number of splits of array for specimen window # TODO minimize globals or make them unique enough
@@ -43,24 +45,29 @@ class clickBox(QtWidgets.QDialog):  # Is it bad to have class based variables? A
         item = QTreeWidgetItem()
         name = "Click: " + self.xClick.text() + ", " + self.yClick.text() + ", " + self.numClicks.text() + ", " + \
                self.timeClicks.text()
-        # TODO figure out error thing so people don't enter settings that make no sense
-        # if self.numClicks.text() or self.xClick.text() or self.yClick.text() or self.timeClicks.text() == "":
-        #     saveError = QMessageBox()
-        #     saveError.setText('An error has occurred during saving. Make sure all fields are filled')
-        #     saveError.exec()
-        # else:
-        item.setText(0, name)
-        self.sequenceBox.addTopLevelItem(item)
-        self.close()
+
+        if self.numClicks.text() == "" or self.xClick.text() == "" or self.yClick.text() == "" or self.timeClicks.text() == "":
+            saveError = QMessageBox()
+            saveError.setText('An error has occurred during saving. Make sure all fields are filled')
+            saveError.exec()
+        else:
+            item.setText(0, name)
+            self.sequenceBox.addTopLevelItem(item)
+            self.close()
 
     def insertClickPressed(self):
         item = QTreeWidgetItem()
         name = "Click: " + self.xClick.text() + ", " + self.yClick.text() + ", " + self.numClicks.text() + ", " + \
                self.timeClicks.text()
-        item.setText(0, name)
-        row = self.sequenceBox.currentIndex().row()
-        self.sequenceBox.insertTopLevelItem(row, item)
-        self.close()
+        if self.numClicks.text() == "" or self.xClick.text() == "" or self.yClick.text() == "" or self.timeClicks.text() == "":
+            saveError = QMessageBox()
+            saveError.setText('An error has occurred during saving. Make sure all fields are filled')
+            saveError.exec()
+        else:
+            item.setText(0, name)
+            row = self.sequenceBox.currentIndex().row()
+            self.sequenceBox.insertTopLevelItem(row, item)
+            self.close()
 
     def cancelClickPressed(self):
         self.close()
@@ -97,23 +104,28 @@ class stringBox(QtWidgets.QDialog):  # Is it bad to have class based variables? 
     def appendActionPressed(self):
         item = QTreeWidgetItem()
         name = "String: " + self.stringName.text()
-        # TODO figure out error thing so people don't enter settings that make no sense
-        # if self.numClicks.text() or self.xClick.text() or self.yClick.text() or self.timeClicks.text() == "":
-        #     saveError = QMessageBox()
-        #     saveError.setText('An error has occurred during saving. Make sure all fields are filled')
-        #     saveError.exec()
-        # else:
-        item.setText(0, name)
-        self.sequenceBox.addTopLevelItem(item)
-        self.close()
+
+        if name == "String: ":
+            saveError = QMessageBox()
+            saveError.setText('An error has occurred during saving. Make sure all fields are filled')
+            saveError.exec()
+        else:
+            item.setText(0, name)
+            self.sequenceBox.addTopLevelItem(item)
+            self.close()
 
     def insertActionSequencePressed(self):
         item = QTreeWidgetItem()
         name = "String: " + self.stringName.text()
-        item.setText(0, name)
-        row = self.sequenceBox.currentIndex().row()
-        self.sequenceBox.insertTopLevelItem(row, item)
-        self.close()
+        if name == "String: ":
+            saveError = QMessageBox()
+            saveError.setText('An error has occurred during saving. Make sure all fields are filled')
+            saveError.exec()
+        else:
+            item.setText(0, name)
+            row = self.sequenceBox.currentIndex().row()
+            self.sequenceBox.insertTopLevelItem(row, item)
+            self.close()
 
     def cancelActionPressed(self):
         self.close()
@@ -148,24 +160,29 @@ class valueBox(QtWidgets.QDialog):  # Is it bad to have class based variables? A
         item = QTreeWidgetItem()
         name = "Value: " + self.valueOption.currentText() + ", " + self.value.text() + ", " + \
                self.valueUnits.currentText()
-        # TODO figure out error thing so people don't enter settings that make no sense
-        # if self.numClicks.text() or self.xClick.text() or self.yClick.text() or self.timeClicks.text() == "":
-        #     saveError = QMessageBox()
-        #     saveError.setText('An error has occurred during saving. Make sure all fields are filled')
-        #     saveError.exec()
-        # else:
-        item.setText(0, name)
-        self.sequenceBox.addTopLevelItem(item)
-        self.close()
+
+        if self.valueOption.currentText() == "" or self.value.text() == "" or self.valueUnits.currentText() == "":
+            saveError = QMessageBox()
+            saveError.setText('An error has occurred during saving. Make sure all fields are filled')
+            saveError.exec()
+        else:
+            item.setText(0, name)
+            self.sequenceBox.addTopLevelItem(item)
+            self.close()
 
     def insertActionSequencePressed(self):
         item = QTreeWidgetItem()
         name = "Value: " + self.valueOption.currentText() + ", " + self.value.text() + ", " + \
                self.valueUnits.currentText()
-        item.setText(0, name)
-        row = self.sequenceBox.currentIndex().row()
-        self.sequenceBox.insertTopLevelItem(row, item)
-        self.close()
+        if self.valueOption.currentText() == "" or self.value.text() == "" or self.valueUnits.currentText() == "":
+            saveError = QMessageBox()
+            saveError.setText('An error has occurred during saving. Make sure all fields are filled')
+            saveError.exec()
+        else:
+            item.setText(0, name)
+            row = self.sequenceBox.currentIndex().row()
+            self.sequenceBox.insertTopLevelItem(row, item)
+            self.close()
 
     def cancelActionPressed(self):
         self.close()
@@ -201,23 +218,28 @@ class specialKeyBox(QtWidgets.QDialog):  # Is it bad to have class based variabl
     def appendActionPressed(self):
         item = QTreeWidgetItem()
         name = self.specialKey.currentText()
-        # TODO figure out error thing so people don't enter settings that make no sense
-        # if self.numClicks.text() or self.xClick.text() or self.yClick.text() or self.timeClicks.text() == "":
-        #     saveError = QMessageBox()
-        #     saveError.setText('An error has occurred during saving. Make sure all fields are filled')
-        #     saveError.exec()
-        # else:
-        item.setText(0, name)
-        self.sequenceBox.addTopLevelItem(item)
-        self.close()
+
+        if self.specialKey.currentText() == "":
+            saveError = QMessageBox()
+            saveError.setText('An error has occurred during saving. Make sure all fields are filled')
+            saveError.exec()
+        else:
+            item.setText(0, name)
+            self.sequenceBox.addTopLevelItem(item)
+            self.close()
 
     def insertActionSequencePressed(self):
         item = QTreeWidgetItem()
         name = self.specialKey.currentText()
-        item.setText(0, name)
-        row = self.sequenceBox.currentIndex().row()
-        self.sequenceBox.insertTopLevelItem(row, item)
-        self.close()
+        if self.specialKey.currentText() == "":
+            saveError = QMessageBox()
+            saveError.setText('An error has occurred during saving. Make sure all fields are filled')
+            saveError.exec()
+        else:
+            item.setText(0, name)
+            row = self.sequenceBox.currentIndex().row()
+            self.sequenceBox.insertTopLevelItem(row, item)
+            self.close()
 
     def cancelActionPressed(self):
         self.close()
@@ -250,22 +272,27 @@ class pauseBox(QtWidgets.QDialog):  # Is it bad to have class based variables? A
         item = QTreeWidgetItem()
         name = "Pause: " + self.pause.text() + ", " + self.pauseUnits.currentText()
         # TODO figure out error thing so people don't enter settings that make no sense
-        # if self.numClicks.text() or self.xClick.text() or self.yClick.text() or self.timeClicks.text() == "":
-        #     saveError = QMessageBox()
-        #     saveError.setText('An error has occurred during saving. Make sure all fields are filled')
-        #     saveError.exec()
-        # else:
-        item.setText(0, name)
-        self.sequenceBox.addTopLevelItem(item)
-        self.close()
+        if self.pause.text() == "" or self.pauseUnits.currentText() == "":
+            saveError = QMessageBox()
+            saveError.setText('An error has occurred during saving. Make sure all fields are filled')
+            saveError.exec()
+        else:
+            item.setText(0, name)
+            self.sequenceBox.addTopLevelItem(item)
+            self.close()
 
     def insertActionSequencePressed(self):
         item = QTreeWidgetItem()
         name = "Pause: " + self.pause.text() + ", " + self.pauseUnits.currentText()
-        item.setText(0, name)
-        row = self.sequenceBox.currentIndex().row()
-        self.sequenceBox.insertTopLevelItem(row, item)
-        self.close()
+        if self.pause.text() == "" or self.pauseUnits.currentText() == "":
+            saveError = QMessageBox()
+            saveError.setText('An error has occurred during saving. Make sure all fields are filled')
+            saveError.exec()
+        else:
+            item.setText(0, name)
+            row = self.sequenceBox.currentIndex().row()
+            self.sequenceBox.insertTopLevelItem(row, item)
+            self.close()
 
     def cancelActionPressed(self):
         self.close()
@@ -416,7 +443,7 @@ class Ui(QtWidgets.QMainWindow):
         self.runExpButton = self.findChild(QtWidgets.QPushButton, 'runExpButton')
         self.runExpButton.clicked.connect(self.runExpButtonPressed)
 
-        self.actionDialogBox = []  # TODO might break lmao
+        self.actionDialogBox = []
 
         # Text box names
         self.config = self.findChild(QtWidgets.QLineEdit, 'config')
@@ -628,16 +655,29 @@ class Ui(QtWidgets.QMainWindow):
 
 # Manage action functions for sequence area/actions
     def editActionPressed(self):
-        try:
+        try:  # we could try making a whole set of new action dialog boxes that only have cancel or save buttons
+            # need some logical statement that differentiates between the actions being edited
+            row = self.sequenceBox.currentIndex().row()
+            self.sequenceBuildArea.takeTopLevelItem(row)
             name = self.sequenceBuildArea.currentItem().text(0)
+            # self.sequenceBox.insertTopLevelItem(row, item)
             print(name)
         except(ValueError, Exception):
-            print('Please choose an action to edit')
+            saveError = QMessageBox()
+            saveError.setText('Please choose an action to edit')
+            saveError.exec()
             return
 
     def deleteActionPressed(self):
-        row = self.sequenceBuildArea.currentIndex().row()
-        self.sequenceBuildArea.takeTopLevelItem(row)
+        try:
+            row = self.sequenceBuildArea.currentIndex().row()
+            name = self.sequenceBuildArea.currentItem().text(0)
+            self.sequenceBuildArea.takeTopLevelItem(row)
+        except(ValueError, Exception):
+            saveError = QMessageBox()
+            saveError.setText('Please choose an action to delete')
+            saveError.exec()
+            return
 
 # Specimen Window function that enables editing specimen setting info
 
