@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>502</width>
-    <height>340</height>
+    <height>352</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,7 +23,7 @@
          <enum>QTabWidget::Rounded</enum>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="setup">
          <attribute name="title">
@@ -353,10 +353,10 @@
           </item>
           <item row="1" column="0">
            <layout class="QGridLayout" name="gridLayout_5">
-            <item row="0" column="0">
+            <item row="1" column="0">
              <widget class="QTreeWidget" name="configTree">
               <property name="contextMenuPolicy">
-               <enum>Qt::ActionsContextMenu</enum>
+               <enum>Qt::DefaultContextMenu</enum>
               </property>
               <column>
                <property name="text">
@@ -364,6 +364,26 @@
                </property>
               </column>
              </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QPushButton" name="deleteConfig">
+              <property name="text">
+               <string>Configuration Delete</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
             </item>
            </layout>
           </item>
@@ -481,26 +501,116 @@
          <attribute name="title">
           <string>Sequence</string>
          </attribute>
-         <layout class="QGridLayout" name="gridLayout_13">
-          <item row="0" column="1">
-           <layout class="QGridLayout" name="gridLayout_11">
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <layout class="QGridLayout" name="gridLayout_12">
             <item row="1" column="0">
-             <widget class="QListWidget" name="sequenceBuildArea">
-              <property name="dragEnabled">
-               <bool>true</bool>
-              </property>
-              <property name="dragDropMode">
-               <enum>QAbstractItemView::DragDrop</enum>
-              </property>
-              <property name="alternatingRowColors">
-               <bool>true</bool>
+             <widget class="QPushButton" name="deleteSequence">
+              <property name="text">
+               <string>Delete Sequence</string>
               </property>
              </widget>
             </item>
             <item row="0" column="0">
+             <widget class="QTreeWidget" name="sequenceTree">
+              <property name="maximumSize">
+               <size>
+                <width>126</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="contextMenuPolicy">
+               <enum>Qt::DefaultContextMenu</enum>
+              </property>
+              <column>
+               <property name="text">
+                <string>File</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_8">
+            <item>
+             <widget class="QGroupBox" name="sequenceAction">
+              <property name="title">
+               <string>Actions</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_6">
+               <item>
+                <widget class="QPushButton" name="clickAction">
+                 <property name="text">
+                  <string>Click</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="stringAction">
+                 <property name="text">
+                  <string>String</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="valueAction">
+                 <property name="text">
+                  <string>Value</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="specialKeyAction">
+                 <property name="text">
+                  <string>Special Key</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pauseAction">
+                 <property name="text">
+                  <string>Pause</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="manageSequence">
+              <property name="title">
+               <string>Manage Actions</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_10">
+               <item>
+                <widget class="QPushButton" name="deleteBlock">
+                 <property name="text">
+                  <string>Delete Action</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="editBlock">
+                 <property name="text">
+                  <string>Edit</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QGridLayout" name="gridLayout_11">
+            <item row="0" column="0">
              <widget class="QLabel" name="label_30">
               <property name="text">
-               <string>Sequence Builder</string>
+               <string>Sequence Order</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -512,113 +622,56 @@
               <item>
                <widget class="QPushButton" name="clearSequence">
                 <property name="text">
-                 <string>Clear Sequence</string>
+                 <string>Clear</string>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QPushButton" name="saveAsSequence">
                 <property name="text">
-                 <string>Save Sequence As</string>
+                 <string>Save As</string>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QPushButton" name="saveSequence">
                 <property name="text">
-                 <string>Save Sequence</string>
+                 <string>Save</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="runSequence">
+                <property name="text">
+                 <string>Run Sequence</string>
                 </property>
                </widget>
               </item>
              </layout>
             </item>
-           </layout>
-          </item>
-          <item row="0" column="0">
-           <layout class="QGridLayout" name="gridLayout_12">
-            <item row="0" column="0">
-             <widget class="QTreeWidget" name="sequenceTree">
-              <property name="maximumSize">
-               <size>
-                <width>126</width>
-                <height>16777215</height>
-               </size>
+            <item row="1" column="0">
+             <widget class="QTreeWidget" name="sequenceBuildArea">
+              <property name="dragEnabled">
+               <bool>true</bool>
+              </property>
+              <property name="dragDropMode">
+               <enum>QAbstractItemView::DragDrop</enum>
+              </property>
+              <property name="alternatingRowColors">
+               <bool>true</bool>
+              </property>
+              <property name="itemsExpandable">
+               <bool>false</bool>
+              </property>
+              <property name="expandsOnDoubleClick">
+               <bool>false</bool>
               </property>
               <column>
                <property name="text">
-                <string>File</string>
+                <string>Sequence</string>
                </property>
               </column>
              </widget>
-            </item>
-            <item row="0" column="1">
-             <layout class="QGridLayout" name="gridLayout_10">
-              <item row="0" column="0">
-               <widget class="QGroupBox" name="groupBox">
-                <property name="maximumSize">
-                 <size>
-                  <width>78</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <property name="title">
-                 <string>Sequence Blocks</string>
-                </property>
-                <layout class="QVBoxLayout" name="verticalLayout_6">
-                 <item>
-                  <widget class="QLabel" name="action1">
-                   <property name="acceptDrops">
-                    <bool>true</bool>
-                   </property>
-                   <property name="text">
-                    <string>Action 1</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="action2">
-                   <property name="acceptDrops">
-                    <bool>true</bool>
-                   </property>
-                   <property name="text">
-                    <string>Action 2</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="action3">
-                   <property name="acceptDrops">
-                    <bool>true</bool>
-                   </property>
-                   <property name="text">
-                    <string>Action 3</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="action4">
-                   <property name="acceptDrops">
-                    <bool>true</bool>
-                   </property>
-                   <property name="text">
-                    <string>Action 4</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="action5">
-                   <property name="acceptDrops">
-                    <bool>true</bool>
-                   </property>
-                   <property name="text">
-                    <string>Action 5</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-             </layout>
             </item>
            </layout>
           </item>
@@ -972,6 +1025,102 @@
   <connection>
    <sender>clear</sender>
    <signal>clicked()</signal>
+   <receiver>width</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>483</x>
+     <y>321</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>438</x>
+     <y>172</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>yPosCheckBox</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>yNegCheckBox</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>128</x>
+     <y>175</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>229</x>
+     <y>188</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clear</sender>
+   <signal>clicked()</signal>
+   <receiver>zres</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>483</x>
+     <y>321</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>438</x>
+     <y>100</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>zNegCheckBox</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>zPosCheckBox</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>200</x>
+     <y>200</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>146</x>
+     <y>202</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clear</sender>
+   <signal>clicked()</signal>
+   <receiver>timestamps</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>483</x>
+     <y>321</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>438</x>
+     <y>220</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>zPosCheckBox</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>zNegCheckBox</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>134</x>
+     <y>205</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>202</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clear</sender>
+   <signal>clicked()</signal>
    <receiver>config</receiver>
    <slot>clear()</slot>
    <hints>
@@ -1004,7 +1153,7 @@
   <connection>
    <sender>clear</sender>
    <signal>clicked()</signal>
-   <receiver>thresh</receiver>
+   <receiver>specimennum</receiver>
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1013,71 +1162,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>438</x>
-     <y>76</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>clear</sender>
-   <signal>clicked()</signal>
-   <receiver>height</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>483</x>
-     <y>321</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>438</x>
-     <y>196</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>yNegCheckBox</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>yPosCheckBox</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>229</x>
-     <y>188</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>136</x>
-     <y>180</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>xPosCheckBox</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>xNegCheckBox</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>156</x>
-     <y>163</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>205</x>
-     <y>150</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>zPosCheckBox</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>zNegCheckBox</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>134</x>
-     <y>205</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>199</x>
-     <y>202</y>
+     <y>244</y>
     </hint>
    </hints>
   </connection>
@@ -1100,6 +1185,22 @@
   <connection>
    <sender>clear</sender>
    <signal>clicked()</signal>
+   <receiver>height</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>483</x>
+     <y>321</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>438</x>
+     <y>196</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clear</sender>
+   <signal>clicked()</signal>
    <receiver>imagefreq</receiver>
    <slot>clear()</slot>
    <hints>
@@ -1114,98 +1215,50 @@
    </hints>
   </connection>
   <connection>
-   <sender>clear</sender>
-   <signal>clicked()</signal>
-   <receiver>zres</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>483</x>
-     <y>321</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>438</x>
-     <y>100</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>clear</sender>
-   <signal>clicked()</signal>
-   <receiver>timestamps</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>483</x>
-     <y>321</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>438</x>
-     <y>220</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>zNegCheckBox</sender>
+   <sender>yNegCheckBox</sender>
    <signal>clicked(bool)</signal>
-   <receiver>zPosCheckBox</receiver>
+   <receiver>yPosCheckBox</receiver>
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>200</x>
-     <y>200</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>146</x>
-     <y>202</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>clear</sender>
-   <signal>clicked()</signal>
-   <receiver>specimennum</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>483</x>
-     <y>321</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>438</x>
-     <y>244</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>clear</sender>
-   <signal>clicked()</signal>
-   <receiver>width</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>483</x>
-     <y>321</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>438</x>
-     <y>172</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>yPosCheckBox</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>yNegCheckBox</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>128</x>
-     <y>175</y>
-    </hint>
-    <hint type="destinationlabel">
      <x>229</x>
      <y>188</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>136</x>
+     <y>180</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clear</sender>
+   <signal>clicked()</signal>
+   <receiver>thresh</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>483</x>
+     <y>321</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>438</x>
+     <y>76</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>xPosCheckBox</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>xNegCheckBox</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>156</x>
+     <y>163</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>205</x>
+     <y>150</y>
     </hint>
    </hints>
   </connection>
