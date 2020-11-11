@@ -23,7 +23,7 @@
          <enum>QTabWidget::Rounded</enum>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="setup">
          <attribute name="title">
@@ -587,16 +587,16 @@
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_10">
                <item>
-                <widget class="QPushButton" name="deleteBlock">
+                <widget class="QPushButton" name="deleteAction">
                  <property name="text">
                   <string>Delete Action</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="editBlock">
+                <widget class="QPushButton" name="editAction">
                  <property name="text">
-                  <string>Edit</string>
+                  <string>Edit Action</string>
                  </property>
                 </widget>
                </item>
@@ -1034,7 +1034,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>438</x>
-     <y>172</y>
+     <y>166</y>
     </hint>
    </hints>
   </connection>
@@ -1066,7 +1066,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>438</x>
-     <y>100</y>
+     <y>97</y>
     </hint>
    </hints>
   </connection>
@@ -1098,7 +1098,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>438</x>
-     <y>220</y>
+     <y>212</y>
     </hint>
    </hints>
   </connection>
@@ -1130,7 +1130,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>438</x>
-     <y>52</y>
+     <y>51</y>
     </hint>
    </hints>
   </connection>
@@ -1162,7 +1162,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>438</x>
-     <y>244</y>
+     <y>235</y>
     </hint>
    </hints>
   </connection>
@@ -1178,7 +1178,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>438</x>
-     <y>124</y>
+     <y>120</y>
     </hint>
    </hints>
   </connection>
@@ -1194,7 +1194,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>438</x>
-     <y>196</y>
+     <y>189</y>
     </hint>
    </hints>
   </connection>
@@ -1210,7 +1210,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>438</x>
-     <y>148</y>
+     <y>143</y>
     </hint>
    </hints>
   </connection>
@@ -1242,7 +1242,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>438</x>
-     <y>76</y>
+     <y>74</y>
     </hint>
    </hints>
   </connection>
@@ -1259,6 +1259,38 @@
     <hint type="destinationlabel">
      <x>205</x>
      <y>150</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clearSequence</sender>
+   <signal>clicked()</signal>
+   <receiver>sequenceBuildArea</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>250</x>
+     <y>326</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>288</x>
+     <y>228</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clear</sender>
+   <signal>clicked()</signal>
+   <receiver>microChannel</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>445</x>
+     <y>325</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>420</x>
+     <y>295</y>
     </hint>
    </hints>
   </connection>

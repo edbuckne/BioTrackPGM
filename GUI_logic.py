@@ -382,7 +382,7 @@ class Ui(QtWidgets.QMainWindow):
         self.configTree.itemDoubleClicked.connect(self.showitemConfig)
 
         self.sequenceTree = self.findChild(QtWidgets.QTreeWidget, 'sequenceTree')
-        self.sequenceTree.itemDoubleClicked.connect(self.showitemSequence)
+        self.sequenceTree.itemDoubleClicked.connect(self.loadSequence)
 
         # Loads list into tree widget(s)
         configlist = loadConfigurationList()
@@ -449,7 +449,10 @@ class Ui(QtWidgets.QMainWindow):
         self.settingsLoadName = self.findChild(QtWidgets.QLineEdit, 'settingsLoadName')
 
         # Sequence Children
-        self.sequenceBuildArea = self.findChild(QtWidgets.QTreeWidget, 'sequenceBuildArea')  # QListWidget
+        self.deleteSequence = self.findChild(QtWidgets.QPushButton, 'deleteSequence')
+        self.deleteSequence.clicked.connect(self.deleteSequencePressed)
+
+        self.sequenceBuildArea = self.findChild(QtWidgets.QTreeWidget, 'sequenceBuildArea')
 
         self.clickAction = self.findChild(QtWidgets.QPushButton, 'clickAction')
         self.clickAction.clicked.connect(self.clickActionPressed)
@@ -465,6 +468,21 @@ class Ui(QtWidgets.QMainWindow):
 
         self.pauseAction = self.findChild(QtWidgets.QPushButton, 'pauseAction')
         self.pauseAction.clicked.connect(self.pauseActionPressed)
+
+        self.deleteAction = self.findChild(QtWidgets.QPushButton, 'deleteAction')
+        self.deleteAction.clicked.connect(self.deleteActionPressed)
+
+        self.editAction = self.findChild(QtWidgets.QPushButton, 'editAction')
+        self.editAction.clicked.connect(self.editActionPressed)
+
+        self.saveAsSequence = self.findChild(QtWidgets.QPushButton, 'saveAsSequence')
+        self.saveAsSequence.clicked.connect(self.saveAsSequencePressed)
+
+        self.saveSequence = self.findChild(QtWidgets.QPushButton, 'saveSequence')
+        self.saveSequence.clicked.connect(self.saveSequencePressed)
+
+        self.runSequence = self.findChild(QtWidgets.QPushButton, 'runSequence')
+        self.runSequence.clicked.connect(self.runSequencePressed)
 
         # Show the GUI
         self.show()
@@ -608,6 +626,19 @@ class Ui(QtWidgets.QMainWindow):
             saveError.exec()
             return
 
+# Manage action functions for sequence area/actions
+    def editActionPressed(self):
+        try:
+            name = self.sequenceBuildArea.currentItem().text(0)
+            print(name)
+        except(ValueError, Exception):
+            print('Please choose an action to edit')
+            return
+
+    def deleteActionPressed(self):
+        row = self.sequenceBuildArea.currentIndex().row()
+        self.sequenceBuildArea.takeTopLevelItem(row)
+
 # Specimen Window function that enables editing specimen setting info
 
     def windowButtonPressed(self):
@@ -657,13 +688,33 @@ class Ui(QtWidgets.QMainWindow):
 
     # TODO When an item is double clicked needs to update the boxes for settings and setup tabs
 
-    def showitemSequence(self, item, column):
+# Loads saved information into sequence build area
+    def loadSequence(self, item, column):  # TODO make a real function to load the sequence data into the sequence area
         print("Sequence has been double clicked:", item.text(column))
 
+    def deleteSequencePressed(self):  # deletes selected sequence in the File explorer in the Sequence tab
+        row = self.sequenceTree.currentIndex().row()
+        # name, Use this for backend delete, WARNING an item has to be selected for this variable to work,
+        # may need a TRY statement
+        name = self.sequenceTree.currentItem().text(0)
+        self.sequenceTree.takeTopLevelItem(row)
+
+# Saving Sequence Build Area Methods
+    def saveAsSequencePressed(self):  # TODO connect these methods to backend
+        print("fake")
+
+    def saveSequencePressed(self):
+        print("fake")
+
+    def runSequencePressed(self):
+        print("fake")
+
+# Setup Configuration delete
     def removeItemTreeConfig(self):
         row = self.configTree.currentIndex().row()
+        # name, Use this for backend delete, WARNING an item has to be selected for this variable to work,
+        # may need a TRY statement
         name = self.configTree.currentItem().text(0)
-        print(name)
         self.configTree.takeTopLevelItem(row)
 
 
