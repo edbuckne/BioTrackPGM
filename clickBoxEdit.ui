@@ -149,21 +149,14 @@
      <item>
       <widget class="QPushButton" name="cancelClick">
        <property name="text">
-        <string>Cancel</string>
+        <string>Cancel Edit</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="insertClick">
+      <widget class="QPushButton" name="saveClick">
        <property name="text">
-        <string>Insert</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="appendClick">
-       <property name="text">
-        <string>Append</string>
+        <string>Save Edit</string>
        </property>
       </widget>
      </item>

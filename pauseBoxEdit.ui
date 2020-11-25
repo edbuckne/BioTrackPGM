@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>stringBox</class>
- <widget class="QDialog" name="stringBox">
+ <class>pauseBox</class>
+ <widget class="QDialog" name="pauseBox">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>394</width>
-    <height>122</height>
+    <width>396</width>
+    <height>130</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>String Settings</string>
+   <string>Pause Settings</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="0" colspan="2">
@@ -19,21 +19,14 @@
      <item>
       <widget class="QPushButton" name="cancelAction">
        <property name="text">
-        <string>Cancel</string>
+        <string>Cancel Edit</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="insertAction">
+      <widget class="QPushButton" name="saveAction">
        <property name="text">
-        <string>Insert</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="appendAction">
-       <property name="text">
-        <string>Append</string>
+        <string>Save Edit</string>
        </property>
       </widget>
      </item>
@@ -44,12 +37,31 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>String:</string>
+        <string>Pause Time:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="stringName"/>
+      <widget class="QLineEdit" name="pause"/>
+     </item>
+     <item>
+      <widget class="QComboBox" name="pauseUnits">
+       <item>
+        <property name="text">
+         <string>S</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Mins</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Hrs</string>
+        </property>
+       </item>
+      </widget>
      </item>
     </layout>
    </item>

@@ -9,7 +9,7 @@ import sys
 from PyQt5.QtGui import QPalette, QColor
 from PyQt5.QtWidgets import (QComboBox, QMessageBox, QFileDialog,
                              QFormLayout, QGroupBox, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, QScrollArea,
-                             QTreeWidgetItem, qApp, QAbstractItemView, QListWidgetItem)
+                             QTreeWidgetItem, qApp, QAbstractItemView, QListWidgetItem, QGridLayout, QHBoxLayout)
 
 # Eli's custom functions
 from fun.dataHandle import loadConfigurationList
@@ -38,6 +38,50 @@ class Color(QWidget):
         palette = self.palette()
         palette.setColor(QPalette.Window, QColor(color))
         self.setPalette(palette)
+
+
+class clickBoxEdit(QtWidgets.QDialog):  # Is it bad to have class based variables? Accessible to the entire class?
+
+    def saveClickPressed(self):
+        item = QTreeWidgetItem()
+        name = "Click: " + self.xClick.text() + ", " + self.yClick.text() + ", " + self.numClicks.text() + ", " + \
+               self.timeClicks.text()
+        if self.numClicks.text() == "" or self.xClick.text() == "" or self.yClick.text() == "" or self.timeClicks.text() == "":
+            saveError = QMessageBox()
+            saveError.setText('An error has occurred during saving. Make sure all fields are filled')
+            saveError.exec()
+        else:
+            item.setText(0, name)
+            row = self.sequenceBox.currentIndex().row()
+            self.sequenceBox.insertTopLevelItem(row, item)
+            self.sequenceBox.takeTopLevelItem(row + 1)
+            self.close()
+
+    def cancelClickPressed(self):
+        self.close()
+
+    def __init__(self, sequence):
+        super(clickBoxEdit, self).__init__()  # Call the inherited classes __init__ method
+        uic.loadUi('clickBoxEdit.ui', self)  # Load the .ui file
+
+        # Text Fields
+        self.numClicks = self.findChild(QtWidgets.QLineEdit, 'numClicks')
+        self.xClick = self.findChild(QtWidgets.QLineEdit, 'xClick')
+        self.yClick = self.findChild(QtWidgets.QLineEdit, 'yClick')
+        self.timeClicks = self.findChild(QtWidgets.QLineEdit, 'timeClicks')
+
+        self.sequenceBox = sequence
+
+        # Buttons
+        self.saveClick = self.findChild(QtWidgets.QPushButton, 'saveClick')
+        self.cancelClick = self.findChild(QtWidgets.QPushButton, 'cancelClick')
+
+        # Signals
+        self.saveClick.clicked.connect(self.saveClickPressed)
+        self.cancelClick.clicked.connect(self.cancelClickPressed)
+
+        # Show the GUI
+        self.show()
 
 
 class clickBox(QtWidgets.QDialog):  # Is it bad to have class based variables? Accessible to the entire class?
@@ -155,6 +199,45 @@ class stringBox(QtWidgets.QDialog):  # Is it bad to have class based variables? 
         self.show()
 
 
+class stringBoxEdit(QtWidgets.QDialog):  # Is it bad to have class based variables? Accessible to the entire class?
+    def saveActionPressed(self):
+        item = QTreeWidgetItem()
+        name = "String: " + self.stringName.text()
+        if name == "String: ":
+            saveError = QMessageBox()
+            saveError.setText('An error has occurred during saving. Make sure all fields are filled')
+            saveError.exec()
+        else:
+            item.setText(0, name)
+            row = self.sequenceBox.currentIndex().row()
+            self.sequenceBox.insertTopLevelItem(row, item)
+            self.sequenceBox.takeTopLevelItem(row + 1)
+            self.close()
+
+    def cancelActionPressed(self):
+        self.close()
+
+    def __init__(self, sequence):
+        super(stringBoxEdit, self).__init__()  # Call the inherited classes __init__ method
+        uic.loadUi('stringBoxEdit.ui', self)  # Load the .ui file
+
+        # Text Fields
+        self.stringName = self.findChild(QtWidgets.QLineEdit, 'stringName')
+
+        self.sequenceBox = sequence
+
+        # Buttons
+        self.saveAction = self.findChild(QtWidgets.QPushButton, 'saveAction')
+        self.cancelAction = self.findChild(QtWidgets.QPushButton, 'cancelAction')
+
+        # Signals
+        self.saveAction.clicked.connect(self.saveActionPressed)
+        self.cancelAction.clicked.connect(self.cancelActionPressed)
+
+        # Show the GUI
+        self.show()
+
+
 class valueBox(QtWidgets.QDialog):  # Is it bad to have class based variables? Accessible to the entire class?
     def appendActionPressed(self):
         item = QTreeWidgetItem()
@@ -214,6 +297,49 @@ class valueBox(QtWidgets.QDialog):  # Is it bad to have class based variables? A
         self.show()
 
 
+class valueBoxEdit(QtWidgets.QDialog):  # Is it bad to have class based variables? Accessible to the entire class?
+
+    def saveActionPressed(self):
+        item = QTreeWidgetItem()
+        name = "Value: " + self.valueOption.currentText() + ", " + self.value.text() + ", " + \
+               self.valueUnits.currentText()
+        if self.valueOption.currentText() == "" or self.value.text() == "" or self.valueUnits.currentText() == "":
+            saveError = QMessageBox()
+            saveError.setText('An error has occurred during saving. Make sure all fields are filled')
+            saveError.exec()
+        else:
+            item.setText(0, name)
+            row = self.sequenceBox.currentIndex().row()
+            self.sequenceBox.insertTopLevelItem(row, item)
+            self.sequenceBox.takeTopLevelItem(row + 1)
+            self.close()
+
+    def cancelActionPressed(self):
+        self.close()
+
+    def __init__(self, sequence):
+        super(valueBoxEdit, self).__init__()  # Call the inherited classes __init__ method
+        uic.loadUi('valueBoxEdit.ui', self)  # Load the .ui file
+
+        # Text Fields
+        self.value = self.findChild(QtWidgets.QLineEdit, 'value')
+        self.valueOption = self.findChild(QtWidgets.QComboBox, 'valueOption')
+        self.valueUnits = self.findChild(QtWidgets.QComboBox, 'valueUnits')
+
+        self.sequenceBox = sequence
+
+        # Buttons
+        self.saveAction = self.findChild(QtWidgets.QPushButton, 'saveAction')
+        self.cancelAction = self.findChild(QtWidgets.QPushButton, 'cancelAction')
+
+        # Signals
+        self.saveAction.clicked.connect(self.saveActionPressed)
+        self.cancelAction.clicked.connect(self.cancelActionPressed)
+
+        # Show the GUI
+        self.show()
+
+
 class specialKeyBox(QtWidgets.QDialog):  # Is it bad to have class based variables? Accessible to the entire class?
     def appendActionPressed(self):
         item = QTreeWidgetItem()
@@ -261,6 +387,45 @@ class specialKeyBox(QtWidgets.QDialog):  # Is it bad to have class based variabl
         # Signals
         self.appendAction.clicked.connect(self.appendActionPressed)
         self.insertActionSequence.clicked.connect(self.insertActionSequencePressed)
+        self.cancelAction.clicked.connect(self.cancelActionPressed)
+
+        # Show the GUI
+        self.show()
+
+
+class specialKeyBoxEdit(QtWidgets.QDialog):  # Is it bad to have class based variables? Accessible to the entire class?
+    def saveActionPressed(self):
+        item = QTreeWidgetItem()
+        name = self.specialKey.currentText()
+        if self.specialKey.currentText() == "":
+            saveError = QMessageBox()
+            saveError.setText('An error has occurred during saving. Make sure all fields are filled')
+            saveError.exec()
+        else:
+            item.setText(0, name)
+            row = self.sequenceBox.currentIndex().row()
+            self.sequenceBox.insertTopLevelItem(row, item)
+            self.sequenceBox.takeTopLevelItem(row + 1)
+            self.close()
+
+    def cancelActionPressed(self):
+        self.close()
+
+    def __init__(self, sequence):
+        super(specialKeyBoxEdit, self).__init__()  # Call the inherited classes __init__ method
+        uic.loadUi('specialKeyBoxEdit.ui', self)  # Load the .ui file
+
+        # Text Fields
+        self.specialKey = self.findChild(QtWidgets.QComboBox, 'specialKey')
+
+        self.sequenceBox = sequence
+
+        # Buttons
+        self.saveAction = self.findChild(QtWidgets.QPushButton, 'saveAction')
+        self.cancelAction = self.findChild(QtWidgets.QPushButton, 'cancelAction')
+
+        # Signals
+        self.saveAction.clicked.connect(self.saveActionPressed)
         self.cancelAction.clicked.connect(self.cancelActionPressed)
 
         # Show the GUI
@@ -321,8 +486,49 @@ class pauseBox(QtWidgets.QDialog):  # Is it bad to have class based variables? A
         self.show()
 
 
-class specimenConfigDialog(QtWidgets.QDialog):
+class pauseBoxEdit(QtWidgets.QDialog):  # Is it bad to have class based variables? Accessible to the entire class?
 
+    def saveActionPressed(self):
+        item = QTreeWidgetItem()
+        name = "Pause: " + self.pause.text() + ", " + self.pauseUnits.currentText()
+        if self.pause.text() == "" or self.pauseUnits.currentText() == "":
+            saveError = QMessageBox()
+            saveError.setText('An error has occurred during saving. Make sure all fields are filled')
+            saveError.exec()
+        else:
+            item.setText(0, name)
+            row = self.sequenceBox.currentIndex().row()
+            self.sequenceBox.insertTopLevelItem(row, item)
+            self.sequenceBox.takeTopLevelItem(row + 1)
+            self.close()
+
+    def cancelActionPressed(self):
+        self.close()
+
+    def __init__(self, sequence):
+        super(pauseBoxEdit, self).__init__()  # Call the inherited classes __init__ method
+        uic.loadUi('pauseBoxEdit.ui', self)  # Load the .ui file
+
+        # Text Fields
+        self.pause = self.findChild(QtWidgets.QLineEdit, 'pause')
+        self.pauseUnits = self.findChild(QtWidgets.QComboBox, 'pauseUnits')
+
+        self.sequenceBox = sequence
+
+        # Buttons
+        self.saveAction = self.findChild(QtWidgets.QPushButton, 'saveAction')
+        self.cancelAction = self.findChild(QtWidgets.QPushButton, 'cancelAction')
+
+        # Signals
+        self.saveAction.clicked.connect(self.saveActionPressed)
+        self.cancelAction.clicked.connect(self.cancelActionPressed)
+
+        # Show the GUI
+        self.show()
+
+
+class specimenConfigDialog(QtWidgets.QDialog):
+    # TODO seems to be some bug error when saving specimen info, occurs sometimes but not all
     def saveSpecConfigButtonPressed(self):  # TODO connect with backend
         specInfo = [0] * widgetNum
         global splits
@@ -354,22 +560,85 @@ class specimenConfigDialog(QtWidgets.QDialog):
         global widgetNum
 
         for i in range(0, spec):
-            blank = QLabel(" ")
             specName = QLabel("Specimen " + str(i + 1))
+
             sequence = QLabel("Sequence")
+
+            blank = QLabel(" ")
+
             seqList = QComboBox()
-            sequencelist = loadSequenceList()
-            for x in range(0, len(sequencelist)):  # sequenceTree Tree Widget
-                seqList.addItem(sequencelist[x])
+
+            unitList = ['nm', 'um', 'mm']
+
+            unitBox = QComboBox()
+            unitBox2 = QComboBox()
+            unitBox3 = QComboBox()
+            unitBox4 = QComboBox()
+            unitBox5 = QComboBox()
+            unitBox6 = QComboBox()
+
+            self.initialX = QHBoxLayout()
+
+            self.initialX.addWidget(QLabel("Initial X"))
+            self.initialX.addWidget(QLineEdit())
+            self.initialX.addWidget(unitBox)
+
+            self.initialXG = QHBoxLayout()
+
+            self.initialXG.addWidget(QLabel("Initial X growth"))
+            self.initialXG.addWidget(QLineEdit())
+            self.initialXG.addWidget(unitBox2)
+
+            self.initialY = QHBoxLayout()
+
+            self.initialY.addWidget(QLabel("Initial Y"))
+            self.initialY.addWidget(QLineEdit())
+            self.initialY.addWidget(unitBox3)
+
+            self.initialYG = QHBoxLayout()
+
+            self.initialYG.addWidget(QLabel("Initial Y Growth"))
+            self.initialYG.addWidget(QLineEdit())
+            self.initialYG.addWidget(unitBox4)
+
+            self.Z1 = QHBoxLayout()
+
+            self.Z1.addWidget(QLabel("Z1"))
+            self.Z1.addWidget(QLineEdit())
+            self.Z1.addWidget(unitBox5)
+
+            self.Z2 = QHBoxLayout()
+
+            self.Z2.addWidget(QLabel("Z2"))
+            self.Z2.addWidget(QLineEdit())
+            self.Z2.addWidget(unitBox6)
+
+            sequenceList = loadSequenceList()
+            # Populates Sequence List Combo Box
+            for x in range(0, len(sequenceList)):  # sequenceTree Tree Widget
+                seqList.addItem(sequenceList[x])
+
+            # Populates Units Combo Boxes, each have to be unique to appear
+            for y in range(0, len(unitList)):
+                unitBox.addItem(unitList[y])
+                unitBox2.addItem(unitList[y])
+                unitBox3.addItem(unitList[y])
+                unitBox4.addItem(unitList[y])
+                unitBox5.addItem(unitList[y])
+                unitBox6.addItem(unitList[y])
+
+            # Adds the respective layouts to each row with their widgets inside
             self.form.addRow(blank)
             self.form.addRow(specName)
-            self.form.addRow(QLabel("Initial X"), QLineEdit())
-            self.form.addRow(QLabel("Initial X growth"), QLineEdit())
-            self.form.addRow(QLabel("Initial Y"), QLineEdit())
-            self.form.addRow(QLabel("Initial Y growth"), QLineEdit())
-            self.form.addRow(QLabel("Z1"), QLineEdit())
-            self.form.addRow(QLabel("Z2"), QLineEdit())
-            self.form.addRow(sequence, seqList)
+            self.form.addRow(self.initialX)
+            self.form.addRow(self.initialXG)
+            self.form.addRow(self.initialY)
+            self.form.addRow(self.initialYG)
+            self.form.addRow(self.Z1)
+            self.form.addRow(self.Z2)
+
+            self.form.addRow(sequence)
+            self.form.addRow(seqList)
 
             widgetNum = widgetNum + 9
 
@@ -398,7 +667,6 @@ class specimenConfigDialog(QtWidgets.QDialog):
 class Ui(QtWidgets.QMainWindow):
     def __init__(self):
         global spec
-        # global trigger
 
         super(Ui, self).__init__()  # Call the inherited classes __init__ method
         uic.loadUi('TestGUIv2.ui', self)  # Load the .ui file
@@ -472,8 +740,11 @@ class Ui(QtWidgets.QMainWindow):
         self.yNegCheckBox = self.findChild(QtWidgets.QCheckBox, 'yNegCheckBox')
         self.zPosCheckBox = self.findChild(QtWidgets.QCheckBox, 'zPosCheckBox')
         self.zNegCheckBox = self.findChild(QtWidgets.QCheckBox, 'zNegCheckBox')
-        self.settingsSaveName = self.findChild(QtWidgets.QLineEdit, 'settingsSaveName')
-        self.settingsLoadName = self.findChild(QtWidgets.QLineEdit, 'settingsLoadName')
+        self.settingsSaveName = self.findChild(QtWidgets.QLineEdit, 'settingsSaveName')  # TODO not sure
+        self.settingsLoadName = self.findChild(QtWidgets.QLineEdit, 'settingsLoadName')  # TODO not sure
+
+        self.settingsSaveButton = self.findChild(QtWidgets.QPushButton, 'settingsSaveButton')
+        self.settingsSaveButton.clicked.connect(self.settingsSaveButtonPressed)
 
         # Sequence Children
         self.deleteSequence = self.findChild(QtWidgets.QPushButton, 'deleteSequence')
@@ -574,26 +845,30 @@ class Ui(QtWidgets.QMainWindow):
     # into the fields, gathers them in a configuration object, and runs the simulation. If there is an error in running
     # this, an error message is printed on the terminal.
     def runSimButtonPressed(self):
-        file = str(QFileDialog.getExistingDirectory(self, 'Select directory where images will be saved'))
-        conf = self.saveButtonPressed()
-        conf.path = file
         try:
+            file = str(QFileDialog.getExistingDirectory(self, 'Select directory where images will be saved'))
+            conf = self.saveButtonPressed()
+            conf.path = file
             run_experiment(conf, 0, simulation=True)
-        except(ValueError, Exception):  # TODO Make this dialog or sound?
-            print('Error running simulation')
+        except(ValueError, Exception):
+            saveError = QMessageBox()
+            saveError.setText('Error running simulation')
+            saveError.exec()
             return
 
     # This function runs when the run simulation button has been pressed. It saves the configuration currently entered
     # into the fields, gathers them in a configuration object, and runs the simulation. If there is an error in running
     # this, an error message is printed on the terminal.
     def runExpButtonPressed(self):
-        file = str(QFileDialog.getExistingDirectory(self, 'Select directory where images will be saved'))
-        conf = self.saveButtonPressed()  # Save this current configuration
-        conf.path = file
         try:
+            file = str(QFileDialog.getExistingDirectory(self, 'Select directory where images will be saved'))
+            conf = self.saveButtonPressed()  # Save this current configuration
+            conf.path = file
             run_experiment(conf, 0, simulation=False)
         except(ValueError, Exception):
-            print('Error running experiment')  # TODO Make this dialog or sound?
+            saveError = QMessageBox()
+            saveError.setText('Error running experiment')
+            saveError.exec()
             return
 
 # These functions open the related action dialog boxes
@@ -655,13 +930,25 @@ class Ui(QtWidgets.QMainWindow):
 
 # Manage action functions for sequence area/actions
     def editActionPressed(self):
-        try:  # we could try making a whole set of new action dialog boxes that only have cancel or save buttons
-            # need some logical statement that differentiates between the actions being edited
-            row = self.sequenceBox.currentIndex().row()
-            self.sequenceBuildArea.takeTopLevelItem(row)
+        try:
             name = self.sequenceBuildArea.currentItem().text(0)
-            # self.sequenceBox.insertTopLevelItem(row, item)
-            print(name)
+            actionEdited = name.split(":")[0]
+
+            if actionEdited == "Enter" or actionEdited == "Backspace" or actionEdited == "Delete":
+                self.actionDialogBox = specialKeyBoxEdit(self.sequenceBuildArea)
+                self.actionDialogBox.exec_()
+            elif actionEdited == "Click":
+                self.actionDialogBox = clickBoxEdit(self.sequenceBuildArea)
+                self.actionDialogBox.exec_()
+            elif actionEdited == "String":
+                self.actionDialogBox = stringBoxEdit(self.sequenceBuildArea)
+                self.actionDialogBox.exec_()
+            elif actionEdited == "Value":
+                self.actionDialogBox = valueBoxEdit(self.sequenceBuildArea)
+                self.actionDialogBox.exec_()
+            elif actionEdited == "Pause":
+                self.actionDialogBox = pauseBoxEdit(self.sequenceBuildArea)
+                self.actionDialogBox.exec_()
         except(ValueError, Exception):
             saveError = QMessageBox()
             saveError.setText('Please choose an action to edit')
@@ -683,18 +970,18 @@ class Ui(QtWidgets.QMainWindow):
 
     def windowButtonPressed(self):
         global spec
-        try:
-            spec = self.specimennum.text()
-            spec = int(float(spec))
+        # try:
+        spec = self.specimennum.text()
+        spec = int(float(spec))
 
-            dlg = specimenConfigDialog(self)
-            dlg.exec_()
+        dlg = specimenConfigDialog(self)
+        dlg.exec_()
 
-        except(ValueError, Exception):
-            saveError = QMessageBox()
-            saveError.setText('Enter a Valid Number For Specimen Amount')
-            saveError.exec()
-            return
+        # except(ValueError, Exception):
+        #     saveError = QMessageBox()
+        #     saveError.setText('Enter a Valid Number For Specimen Amount')
+        #     saveError.exec()
+        #     return
 
 # This function is called when an item from the pre-existing configuration list. That configuration's information
 # is loaded into a configuration object and the information from the object is parsed into the fields on the GUI.
@@ -724,7 +1011,11 @@ class Ui(QtWidgets.QMainWindow):
             self.xyResUnits.setCurrentIndex(conf.lateralUnits)
             self.imageFreqUnits.setCurrentIndex(conf.imageFrequencyUnits)
         except(ValueError, Exception):
-            print("config load failed")
+            name = self.configTree.currentItem().text(0)
+            saveError = QMessageBox()
+            saveError.setText(name + ' file not able to load')
+            saveError.exec()
+            return
 
     # TODO When an item is double clicked needs to update the boxes for settings and setup tabs
 
@@ -732,30 +1023,41 @@ class Ui(QtWidgets.QMainWindow):
     def loadSequence(self, item, column):  # TODO make a real function to load the sequence data into the sequence area
         print("Sequence has been double clicked:", item.text(column))
 
-    def deleteSequencePressed(self):  # deletes selected sequence in the File explorer in the Sequence tab
-        row = self.sequenceTree.currentIndex().row()
-        # name, Use this for backend delete, WARNING an item has to be selected for this variable to work,
-        # may need a TRY statement
-        name = self.sequenceTree.currentItem().text(0)
-        self.sequenceTree.takeTopLevelItem(row)
+    def deleteSequencePressed(self):  # TODO connect to backend
+        try:
+            row = self.sequenceTree.currentIndex().row()
+            name = self.sequenceTree.currentItem().text(0)
+            self.sequenceTree.takeTopLevelItem(row)
+        except(ValueError, Exception):
+            saveError = QMessageBox()
+            saveError.setText('Please select a sequence to delete')
+            saveError.exec()
+            return
 
 # Saving Sequence Build Area Methods
     def saveAsSequencePressed(self):  # TODO connect these methods to backend
         print("fake")
 
-    def saveSequencePressed(self):
+    def saveSequencePressed(self):  # TODO connect these methods to backend
         print("fake")
 
-    def runSequencePressed(self):
+    def runSequencePressed(self):  # TODO connect these methods to backend
         print("fake")
 
 # Setup Configuration delete
-    def removeItemTreeConfig(self):
-        row = self.configTree.currentIndex().row()
-        # name, Use this for backend delete, WARNING an item has to be selected for this variable to work,
-        # may need a TRY statement
-        name = self.configTree.currentItem().text(0)
-        self.configTree.takeTopLevelItem(row)
+    def removeItemTreeConfig(self):  # TODO connect method to backend
+        try:
+            row = self.configTree.currentIndex().row()
+            name = self.configTree.currentItem().text(0)
+            self.configTree.takeTopLevelItem(row)
+        except(ValueError, Exception):
+            saveError = QMessageBox()
+            saveError.setText('Please choose a configuration to delete')
+            saveError.exec()
+            return
+
+    def settingsSaveButtonPressed(self):  # TODO connect method to backend
+        print("Settings Faked Saved")
 
 
 app = QtWidgets.QApplication(sys.argv)  # Create an instance of QtWidgets.QApplication

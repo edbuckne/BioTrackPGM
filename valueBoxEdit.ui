@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>valueBox</class>
+ <widget class="QDialog" name="valueBox">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>396</width>
+    <height>130</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Value Settings</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="0" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="cancelAction">
+       <property name="text">
+        <string>Cancel Edit</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="saveAction">
+       <property name="text">
+        <string>Save Edit</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="0" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QComboBox" name="valueOption">
+       <item>
+        <property name="text">
+         <string>X Pos</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Y Pos</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Z Front</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Z Back</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="value"/>
+     </item>
+     <item>
+      <widget class="QComboBox" name="valueUnits">
+       <item>
+        <property name="text">
+         <string>nm</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>um</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>mm</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
